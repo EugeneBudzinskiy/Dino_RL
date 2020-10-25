@@ -1,9 +1,10 @@
 from abc import ABC
 from PhysxObj import PhysicalObject
 from random import randint
+from Interfaces import IProp
 
 
-class Prop(PhysicalObject, ABC):
+class Prop(PhysicalObject, IProp, ABC):
     def __init__(self, height: int, width: int):
         PhysicalObject.__init__(self)
         self._prop_vel = 5
