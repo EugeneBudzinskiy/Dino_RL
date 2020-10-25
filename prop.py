@@ -41,6 +41,7 @@ class Prop(PhysicalObject, ABC):
 
 
 class Bird(Prop):
+    # Bird
     spawnheight = (0, 50)
 
     def __init__(self, height: int, width: int):
