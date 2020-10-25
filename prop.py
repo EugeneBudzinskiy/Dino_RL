@@ -4,7 +4,6 @@ from random import randint
 
 
 class Prop(PhysicalObject, ABC):
-
     def __init__(self, height: int, width: int):
         PhysicalObject.__init__(self)
         self._prop_vel = 5
