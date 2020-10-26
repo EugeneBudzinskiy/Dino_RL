@@ -6,6 +6,22 @@ from abc import ABC, abstractmethod
 
 class IPhysicalObject(ABC):
     @abstractmethod
+    def coord(self):
+        pass
+
+    @abstractmethod
+    def vel(self):
+        pass
+
+    @abstractmethod
+    def acc(self):
+        pass
+
+    @abstractmethod
+    def size(self):
+        pass
+
+    @abstractmethod
     def update(self):
         pass
 
