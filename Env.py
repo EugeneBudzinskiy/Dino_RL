@@ -1,4 +1,4 @@
-from prop import Prop
+from Interfaces import IProp
 
 
 class Environment:
@@ -6,8 +6,8 @@ class Environment:
     def __init__(self):
         self.__prop_list = list()
 
-    def spawn_prop(self, prop: Prop, x, y):
-        if isinstance(prop, Prop):
+    def spawn_prop(self, prop: IProp, x, y):
+        if isinstance(prop, IProp):
             prop.spawn(x, y)
             self.__prop_list.append(prop)
 
