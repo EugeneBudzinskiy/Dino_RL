@@ -29,6 +29,14 @@ class IPhysicalObject(ABC):
 class IProp(ABC):
 
     @abstractmethod
+    def prop_vel(self):
+        pass
+
+    @abstractmethod
+    def spawn_height(self):
+        pass
+
+    @abstractmethod
     def spawn(self, x: int, y: int):
         pass
 
