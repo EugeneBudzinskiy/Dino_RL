@@ -4,8 +4,9 @@ from PhysxObj import PhysicalObject
 
 class Hero(PhysicalObject, ABC):
     def __init__(self):
-        self._gravity_acc = (0, -10)
-        self._jump_vel = (0, 10)
+        super(PhysicalObject).__init__()
+        self._gravity_acc = -10
+        self._jump_vel = 10
 
         self._possible_states = ['nothing', 'fall', 'jump', 'sit']
 
@@ -14,17 +15,17 @@ class Hero(PhysicalObject, ABC):
 
     def _fall(self):
         self._state = self._possible_states[1]
-        self.set_acc(self._gravity_acc)
+        self.set_acc(0, self._gravity_acc)
         self.update()
 
     def _jump(self):
         self._state = self._possible_states[2]
-        self.set_vel(self._jump_vel)
+        self.set_vel(0, self._jump_vel)
         self.update()
 
     def _sit(self):
         if self._state == self._possible_states[2]:
-            self.set_acc(self._gravity_acc * 10)
+            self.set_acc(0, self._gravity_acc * 10)
         self._state = self._possible_states[3]
         self.update()
 
