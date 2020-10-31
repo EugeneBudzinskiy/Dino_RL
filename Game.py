@@ -82,7 +82,7 @@ class GameEngine:
                     self.is_running = False
 
             # self.hero.update()
-            self.environment.update()
+            # self.environment.update()
             self.draw_visible_obj()
             pg.display.flip()
 
