@@ -32,8 +32,8 @@ class Prop(PhysicalObject, IProp, ABC):
         else:
             self._spawn_height = height
 
-    def spawn(self, x: int, y: int):
-        self.set_coord(x, y)
+    def spawn(self, x: int):
+        self.set_coord(x, self._spawn_height)
         self.is_spawned = True
 
     def move(self):

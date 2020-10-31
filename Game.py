@@ -70,12 +70,19 @@ class GameEngine:
 
     def setup(self):
         self.screen = pg.display.set_mode((self.width, self.height))
-        # self.draw_visible_obj()
+        self.draw_visible_obj()
+        self.is_running = True
+        self.update()
 
     def update(self):
-        # self.hero.update()
-        self.environment.update()
-        self.draw_visible_obj()
+        while self.is_running:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    self.is_running = False
+
+            # self.hero.update()
+            self.environment.update()
+            self.draw_visible_obj()
 
 
 def main():
