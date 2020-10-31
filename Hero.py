@@ -2,7 +2,7 @@ from abc import ABC
 from PhysxObj import PhysicalObject
 
 
-class Hero(ABC, PhysicalObject):
+class Hero(PhysicalObject, ABC):
     def __init__(self):
         self._gravity_acc = (0, -10)
         self._jump_vel = (0, 10)
@@ -36,3 +36,11 @@ class Hero(ABC, PhysicalObject):
             self._state = state
         else:
             self._state = self._possible_states[0]
+
+
+class Human(Hero):
+    pass
+
+
+class Agent(Hero):
+    pass

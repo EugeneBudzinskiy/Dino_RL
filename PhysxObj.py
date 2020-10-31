@@ -2,7 +2,7 @@ from abc import ABC
 from Interfaces import IPhysicalObject
 
 
-class PhysicalObject(ABC, IPhysicalObject):
+class PhysicalObject(IPhysicalObject, ABC):
     def __init__(self):
         self._coord = (0, 0)  # X|Y
         self._vel = (0, 0)    # X|Y

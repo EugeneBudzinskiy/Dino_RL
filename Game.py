@@ -8,15 +8,15 @@ HEIGHT = 500
 
 
 class GameEngine:
-    def __init__(self, is_human: bool):
+    def __init__(self):
         self.is_running = False
-        self.human_player = is_human
+        self.human_player = True
         self.human = None
         self.agent = None
-        if self.human_player:
-            self.hero = Hero()  # TODO replace Hero to Human
-        else:
-            self.hero = Hero()  # TODO replace Hero to Agent
+        # if self.human_player:
+        #     self.hero = Hero()  # TODO replace Hero to Human
+        # else:
+        #     self.hero = Hero()  # TODO replace Hero to Agent
         self.environment = Environment()
         self.width = WIDTH
         self.height = HEIGHT
@@ -28,7 +28,8 @@ class GameEngine:
         if isinstance(obj, PhysicalObject):
             if self.screen:
                 try:
-                    pg.draw.rect(self.screen, (0, 128, 255), pg.Rect(obj.coord[0], obj.coord[1], obj.size[0], obj.size[1]))
+                    pg.draw.rect(self.screen, (0, 128, 255),
+                                 pg.Rect(obj.coord[0], obj.coord[1], obj.size[0], obj.size[1]))
                 except:
                     exit(500)
             else:
@@ -50,10 +51,18 @@ class GameEngine:
 
     def setup(self):
         self.screen = pg.display.set_mode((self.width, self.height))
-        self.draw_visible_obj()
+        # self.draw_visible_obj()
 
     def update(self):
         self.hero.update()
         self.environment.update()
         self.draw_visible_obj()
 
+
+def main():
+    game = GameEngine()
+    game.setup()
+
+
+if __name__ == '__main__':
+    main()
