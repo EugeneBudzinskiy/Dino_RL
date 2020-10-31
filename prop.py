@@ -6,11 +6,11 @@ from Interfaces import IProp
 
 class Prop(PhysicalObject, IProp, ABC):
     def __init__(self, height: int, width: int):
-        super(PhysicalObject).__init__()
+        PhysicalObject.__init__(self)
         self._prop_vel = 5
         self._vel = (self._prop_vel, 0)
         self._spawn_height = 0
-        self._size = self.set_size(width, height)
+        self.set_size(width, height)
         self.is_spawned = False
 
     @property
@@ -46,11 +46,11 @@ class Bird(Prop):
     spawnheight = (0, 50)
 
     def __init__(self, height: int, width: int):
-        super(Prop).__init__(height, width)
+        Prop.__init__(self, height, width)
         self.spawn_height = Bird.spawnheight[randint(0, 1)]
 
 
 class Cactus(Prop):
     def __init__(self, height: int, width: int):
-        super(Prop).__init__(height, width)
+        Prop.__init__(self, height, width)
         self.spawn_height = 0

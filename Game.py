@@ -70,7 +70,7 @@ class GameEngine:
 
     def setup(self):
         self.screen = pg.display.set_mode((self.width, self.height))
-        self.draw_visible_obj()
+        self.create_level()
         self.is_running = True
         self.update()
 
