@@ -4,7 +4,7 @@ from PhysxObj import PhysicalObject
 
 class Hero(PhysicalObject, ABC):
     def __init__(self):
-        super(PhysicalObject).__init__()
+        super().__init__()
         self._gravity_acc = -10
         self._jump_vel = 10
 
