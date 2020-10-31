@@ -10,7 +10,7 @@ class Prop(PhysicalObject, IProp, ABC):
         self._prop_vel = 5
         self._vel = (self._prop_vel, 0)
         self._spawn_height = 0
-        self._size = (height, width)
+        self._size = self.set_size(width, height)
         self.is_spawned = False
 
     @property
