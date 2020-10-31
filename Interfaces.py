@@ -37,7 +37,7 @@ class IProp(ABC):
         pass
 
     @abstractmethod
-    def spawn(self, x: int, y: int):
+    def spawn(self, x: int):
         pass
 
     @abstractmethod
