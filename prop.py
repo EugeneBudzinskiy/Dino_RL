@@ -6,7 +6,7 @@ from Interfaces import IProp
 
 class Prop(PhysicalObject, IProp, ABC):
     def __init__(self, height: int, width: int):
-        super().__init__(self)
+        super().__init__()
         self._prop_vel = 5
         self._vel = (self._prop_vel, 0)
         self._spawn_height = 0
