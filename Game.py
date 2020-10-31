@@ -32,7 +32,7 @@ class GameEngine:
         if isinstance(obj, PhysicalObject):
             if self.screen:
                 try:
-                    cur_coord = obj.get_coord_normalized(self.height)
+                    cur_coord = obj.get_coord_normalized(self.height - obj.size[1])
                     pg.draw.rect(self.screen, (0, 128, 255),
                                  pg.Rect(cur_coord[0], cur_coord[1], obj.size[0], obj.size[1]))
                 except:
