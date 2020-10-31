@@ -32,8 +32,9 @@ class GameEngine:
         if isinstance(obj, PhysicalObject):
             if self.screen:
                 try:
+                    cur_coord = obj.get_coord_normalized(self.height)
                     pg.draw.rect(self.screen, (0, 128, 255),
-                                 pg.Rect(obj.coord[0], obj.coord[1], obj.size[0], obj.size[1]))
+                                 pg.Rect(cur_coord[0], cur_coord[1], obj.size[0], obj.size[1]))
                 except:
                     exit(500)
             else:
@@ -56,8 +57,8 @@ class GameEngine:
     def create_level(self):
         first_cactus = Cactus(CACTUS_SIZE[0], CACTUS_SIZE[1])
         self.environment.spawn_prop(first_cactus, 100)
-        for props in range(0, 9):
-            self.spawn_prop(self.environment.prop_list[len(self.environment.prop_list)-1])
+        # for props in range(0, 9):
+        #     self.spawn_prop(self.environment.prop_list[len(self.environment.prop_list)-1])
 
     def draw_visible_obj(self):
         self.visible_obj = []

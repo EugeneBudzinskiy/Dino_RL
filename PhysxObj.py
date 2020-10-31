@@ -26,7 +26,7 @@ class PhysicalObject(IPhysicalObject, ABC):
         return self._size
 
     def get_coord_normalized(self, height: int):
-        return self._coord + (0, height)
+        return self._coord[0], self._coord[1] + height
 
     def set_vel(self, x_vel: int, y_vel: int):
         self._vel = (x_vel, y_vel)
