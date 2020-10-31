@@ -7,30 +7,32 @@ class Hero(ABC, PhysicalObject):
         self._gravity_acc = (0, -10)
         self._jump_vel = (0, 10)
 
-        self._state = 0  # 0 = nothing | 1 = fall | 2 = jump | 3 = sit
+        self._possible_states = ['nothing', 'fall', 'jump', 'sit']
+
+        self._state = self._possible_states[0]
         self._action_queue = list()
 
     def _fall(self):
-        self._state = 1
+        self._state = self._possible_states[1]
         self.set_acc(self._gravity_acc)
         self.update()
 
     def _jump(self):
-        self._state = 2
+        self._state = self._possible_states[2]
         self.set_vel(self._jump_vel)
         self.update()
 
     def _sit(self):
-        if self._state == 1:
+        if self._state == self._possible_states[2]:
             self.set_acc(self._gravity_acc * 10)
-        self._state = 3
+        self._state = self._possible_states[3]
         self.update()
 
     def get_state(self):
         return self._state
 
-    def set_state(self, state: int):
-        if 0 <= state <= 3:
+    def set_state(self, state: str):
+        if state in self._possible_states:
             self._state = state
         else:
-            self._state = 0
+            self._state = self._possible_states[0]

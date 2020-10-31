@@ -7,7 +7,7 @@ class PhysicalObject(ABC, IPhysicalObject):
         self._coord = (0, 0)  # X|Y
         self._vel = (0, 0)    # X|Y
         self._acc = (0, 0)    # X|Y
-        self._size = (0, 0)   # H|W
+        self._size = (0, 0)   # W|H
 
     @property
     def coord(self):
@@ -35,7 +35,7 @@ class PhysicalObject(ABC, IPhysicalObject):
         self._acc = (x_acc, y_acc)
 
     def set_size(self, width: int, height: int):
-        self._acc = (width, height)
+        self._size = (width, height)
 
     def update(self):
         c_acc_x = self._acc[0]
