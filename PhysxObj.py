@@ -56,7 +56,7 @@ class PhysicalObject(IPhysicalObject, ABC):
         c_coord_x -= c_vel_x
         c_coord_y -= c_vel_y
 
-        if c_coord_y < 0:
+        if c_coord_y > 0:
             c_vel_y = 0
             c_acc_y = 0
             c_coord_y = 0
