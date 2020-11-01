@@ -37,10 +37,6 @@ class Prop(PhysicalObject, IProp, ABC):
         self.set_coord(x, self._spawn_height)
         self.is_spawned = True
 
-    def move(self):
-        if self.is_spawned:
-            self.update()
-
 
 class Bird(Prop):
     # Bird
