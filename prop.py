@@ -2,6 +2,7 @@ from abc import ABC
 from PhysxObj import PhysicalObject
 from random import randint
 from Interfaces import IProp
+from config import BIRD_SPAWN_HEIGHT
 
 
 class Prop(PhysicalObject, IProp, ABC):
@@ -39,12 +40,9 @@ class Prop(PhysicalObject, IProp, ABC):
 
 
 class Bird(Prop):
-    # Bird
-    spawnheight = (-10, -50)
-
     def __init__(self, height: int, width: int):
         super().__init__(height, width)
-        self.spawn_height = Bird.spawnheight[randint(0, 1)]
+        self.spawn_height = BIRD_SPAWN_HEIGHT[randint(0, len(BIRD_SPAWN_HEIGHT)-1)]
 
 
 class Cactus(Prop):

@@ -82,6 +82,8 @@ class GameEngine:
             self.hero.update()
             self.environment.update()
 
+
+
             self.draw_visible_obj()
             pg.display.flip()
 
