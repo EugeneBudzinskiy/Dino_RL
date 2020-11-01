@@ -46,7 +46,16 @@ class Hero(PhysicalObject, ABC):
 
 
 class Human(Hero):
-    pass
+    @staticmethod
+    def change_state(pressed_button, key_list: list):
+        if pressed_button[key_list[0]]:
+            print("up")
+        if pressed_button[key_list[1]]:
+            print("down")
+        if pressed_button[key_list[2]]:
+            print("left")
+        if pressed_button[key_list[3]]:
+            print("right")
 
 
 class Agent(Hero):

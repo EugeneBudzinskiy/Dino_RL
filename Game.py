@@ -1,5 +1,5 @@
 import pygame as pg
-from Hero import Hero
+from Hero import Hero, Human
 from Env import Environment
 from PhysxObj import PhysicalObject
 from prop import Prop, Bird, Cactus
@@ -15,21 +15,24 @@ class GameEngine:
     def __init__(self):
         self.is_running = False
         self.human_player = True
+
         self.human = None
         self.agent = None
         self.clock = None
+        self.screen = None
 
-        # if self.human_player:
-        #     self.hero = Hero()  # TODO replace Hero to Human
-        # else:
-        #     self.hero = Hero()  # TODO replace Hero to Agent
-
-        self.environment = Environment()
         self.width = WIDTH
         self.height = HEIGHT
-        self.screen = None
-        pg.init()
+
+        if self.human_player:
+            self.hero = Human()  # TODO replace Hero to Human
+        else:
+            self.hero = None  # TODO replace Hero to Agent
+
+        self.environment = Environment()
         self.visible_obj = []
+
+        pg.init()
 
     def draw_obj(self, obj):
         if isinstance(obj, Prop) or isinstance(obj, Hero):
@@ -87,6 +90,10 @@ class GameEngine:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.is_running = False
+
+            pressed = pg.key.get_pressed()
+            key_arr = [pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT]
+            self.hero.change_state(pressed, key_arr)
 
             self.screen.fill((0, 0, 0))
             # self.hero.update()
