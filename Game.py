@@ -49,14 +49,14 @@ class GameEngine:
             raise Exception('Function draw_obj can`t draw this obj.')
 
     def spawn_prop(self, last_prop: Prop):
-        BIRD = 2
-        CACTUS = 1
+        BIRD = 9
+
         distance = [50, 75, 100]
-        type_prop = randint(1, 2)
+        type_prop = randint(1, 10)
         instance_prop = None
         if type_prop == BIRD:
             instance_prop = Bird(BIRD_SIZE[0], BIRD_SIZE[1])
-        if type_prop == CACTUS:
+        if type_prop != BIRD:
             instance_prop = Cactus(CACTUS_SIZE[0], CACTUS_SIZE[1])
         self.environment.spawn_prop(instance_prop, last_prop.coord[0] + last_prop.size[0] + distance[randint(0, 2)])
 

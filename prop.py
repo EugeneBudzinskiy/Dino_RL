@@ -40,7 +40,7 @@ class Prop(PhysicalObject, IProp, ABC):
 
 class Bird(Prop):
     # Bird
-    spawnheight = (0, -50)
+    spawnheight = (-10, -50)
 
     def __init__(self, height: int, width: int):
         super().__init__(height, width)
