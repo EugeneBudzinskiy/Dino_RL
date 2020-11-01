@@ -17,10 +17,13 @@ class GameEngine:
         self.human_player = True
         self.human = None
         self.agent = None
+        self.clock = None
+
         # if self.human_player:
         #     self.hero = Hero()  # TODO replace Hero to Human
         # else:
         #     self.hero = Hero()  # TODO replace Hero to Agent
+
         self.environment = Environment()
         self.width = WIDTH
         self.height = HEIGHT
@@ -48,10 +51,12 @@ class GameEngine:
         distance = [5, 7, 10]
         type_prop = randint(1, 2)
         instance_prop = None
+
         if type_prop == BIRD:
             instance_prop = Bird(BIRD_SIZE[0], BIRD_SIZE[1])
         if type_prop == CACTUS:
             instance_prop = Cactus(CACTUS_SIZE[0], CACTUS_SIZE[1])
+
         self.environment.spawn_prop(instance_prop, last_prop.coord[0] + last_prop.size[0] + distance[randint(0, 2)])
 
     def create_level(self):
@@ -72,19 +77,26 @@ class GameEngine:
     def setup(self):
         self.screen = pg.display.set_mode((self.width, self.height))
         self.create_level()
+
+        self.clock = pg.time.Clock()
+
         self.is_running = True
         self.update()
 
     def update(self):
         while self.is_running:
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.is_running = False
 
+            self.screen.fill((0, 0, 0))
             # self.hero.update()
-            # self.environment.update()
+            self.environment.update()
             self.draw_visible_obj()
             pg.display.flip()
+
+            self.clock.tick(60)
 
 
 def main():
