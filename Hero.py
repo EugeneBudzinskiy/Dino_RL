@@ -5,8 +5,10 @@ from PhysxObj import PhysicalObject
 class Hero(PhysicalObject, ABC):
     def __init__(self):
         super().__init__()
-        self._gravity_acc = -10
-        self._jump_vel = 10
+        self._gravity_acc = 10
+        self._jump_vel = 2
+
+        self.set_acc(0, self._gravity_acc)
 
         self._possible_states = ['nothing', 'fall', 'jump', 'sit']
 
@@ -55,7 +57,8 @@ class Human(Hero):
             # up
             self.set_state("jump")
         if pressed_button[key_list[1]]:
-            print("down")
+            # down
+            self.set_state("sit")
 
 
 class Agent(Hero):
