@@ -8,6 +8,7 @@ class Hero(PhysicalObject, ABC):
         super().__init__()
         self._gravity_acc = -1
         self._jump_vel = 10
+        self.delay = 0
 
         self.set_size(HERO_SIZE[0], HERO_SIZE[1])
         self.set_acc(0, self._gravity_acc)
@@ -28,8 +29,10 @@ class Hero(PhysicalObject, ABC):
         self.set_acc(0, self._gravity_acc)
 
     def _jump(self):
-        self._state = "jump"
-        self.set_vel(0, self._jump_vel)
+        if self._state == "nothing":
+            self._state = "jump"
+            self.set_vel(0, self._jump_vel)
+        self._fall()
 
     def _sit(self):
         self._squish()
@@ -38,7 +41,16 @@ class Hero(PhysicalObject, ABC):
         else:
             self._state = "sit"
 
-    def _nothing(self):
+    def get_state(self):
+        return self._state
+
+    def update_state(self):
+        if self._state == "sit":
+            self.delay += 1
+            if self.delay == 10:
+                self.delay = 0
+                self._state = "nothing"
+
         if self.coord[1] == 0:
             if self._state == "nothing":
                 self._un_squish()
@@ -46,29 +58,17 @@ class Hero(PhysicalObject, ABC):
             if self._state == "fall":
                 self._state = "nothing"
 
-            if self._state == "sit":
-                self.delay += 1
-                if self.delay == 10:
-                    self.delay = 0
-                    self._state = "nothing"
-
-    def get_state(self):
-        return self._state
-
 
 class Human(Hero):
     def __init__(self):
         super().__init__()
-        self.delay = 0
 
     def change_state(self, pressed_button, key_list: list):
         if pressed_button[key_list[0]]:
             self._jump()
-            self._fall()
         if pressed_button[key_list[1]]:
             self._sit()
-
-        self._nothing()
+        self.update_state()
 
 
 class Agent(Hero):

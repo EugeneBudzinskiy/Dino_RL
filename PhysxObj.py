@@ -1,5 +1,6 @@
 from abc import ABC
 from Interfaces import IPhysicalObject
+from config import GLOBAL_OFFSET, GROUND_LEVEL
 
 
 class PhysicalObject(IPhysicalObject, ABC):
@@ -26,7 +27,7 @@ class PhysicalObject(IPhysicalObject, ABC):
         return self._size
 
     def get_coord_normalized(self, height: int):
-        return self._coord[0], self._coord[1] + height
+        return self._coord[0] + GLOBAL_OFFSET, self._coord[1] + height - GROUND_LEVEL
 
     def set_vel(self, x_vel: int, y_vel: int):
         self._vel = (x_vel, y_vel)

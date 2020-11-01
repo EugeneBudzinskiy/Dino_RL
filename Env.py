@@ -31,7 +31,7 @@ class Environment:
 
     def remove_prop(self):
         for prop in self.__prop_list:
-            if prop.coord[0] <= 0:
+            if prop.coord[0] < - GLOBAL_OFFSET * 2:
                 self.__prop_list.remove(prop)
 
     def update(self):
