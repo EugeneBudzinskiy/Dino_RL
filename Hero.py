@@ -35,6 +35,12 @@ class Hero(PhysicalObject, ABC):
     def set_state(self, state: str):
         if state in self._possible_states:
             self._state = state
+            if state == "fall":
+                self._fall()
+            elif state == "jump":
+                self._jump()
+            elif state == "sit":
+                self._sit()
         else:
             self._state = self._possible_states[0]
 
