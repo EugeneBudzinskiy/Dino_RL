@@ -4,11 +4,7 @@ from Env import Environment
 from PhysxObj import PhysicalObject
 from prop import Prop, Bird, Cactus
 from random import randint
-
-WIDTH = 1200
-HEIGHT = 600
-BIRD_SIZE = tuple([15, 15])
-CACTUS_SIZE = tuple([25, 15])
+from config import *
 
 
 class GameEngine:
@@ -49,16 +45,14 @@ class GameEngine:
             raise Exception('Function draw_obj can`t draw this obj.')
 
     def spawn_prop(self, last_prop: Prop):
-        BIRD = 9
-
-        distance = [50, 75, 100]
-        type_prop = randint(1, 10)
+        type_prop = randint(1, BIRD_SPAWN_CHANCE)
         instance_prop = None
-        if type_prop == BIRD:
+        if type_prop == BIRD_SPAWN_CHANCE:
             instance_prop = Bird(BIRD_SIZE[0], BIRD_SIZE[1])
-        if type_prop != BIRD:
+        if type_prop != BIRD_SPAWN_CHANCE:
             instance_prop = Cactus(CACTUS_SIZE[0], CACTUS_SIZE[1])
-        self.environment.spawn_prop(instance_prop, last_prop.coord[0] + last_prop.size[0] + distance[randint(0, 2)])
+        self.environment.spawn_prop(instance_prop,
+                                    last_prop.coord[0] + last_prop.size[0] + SPAWN_DISTANCE[randint(0, len(SPAWN_DISTANCE)-1)])
 
     def create_level(self):
         first_cactus = Cactus(CACTUS_SIZE[0], CACTUS_SIZE[1])
@@ -106,10 +100,3 @@ class GameEngine:
             self.clock.tick(60)
 
 
-def main():
-    game = GameEngine()
-    game.setup()
-
-
-if __name__ == '__main__':
-    main()
