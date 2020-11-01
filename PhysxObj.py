@@ -50,11 +50,11 @@ class PhysicalObject(IPhysicalObject, ABC):
         c_coord_x = self._coord[0]
         c_coord_y = self._coord[1]
 
-        c_vel_x += c_acc_x
-        c_vel_y += c_acc_y
+        c_vel_x -= c_acc_x
+        c_vel_y -= c_acc_y
 
-        c_coord_x += c_vel_x
-        c_coord_y += c_vel_y
+        c_coord_x -= c_vel_x
+        c_coord_y -= c_vel_y
 
         if c_coord_y < 0:
             c_vel_y = 0
