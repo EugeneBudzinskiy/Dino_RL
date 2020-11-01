@@ -5,8 +5,8 @@ from PhysxObj import PhysicalObject
 from prop import Prop, Bird, Cactus
 from random import randint
 
-WIDTH = 400
-HEIGHT = 500
+WIDTH = 1200
+HEIGHT = 600
 BIRD_SIZE = tuple([15, 15])
 CACTUS_SIZE = tuple([25, 15])
 
@@ -31,8 +31,8 @@ class GameEngine:
         pg.init()
         self.visible_obj = []
 
-    def draw_obj(self, obj: Prop):
-        if isinstance(obj, Prop):
+    def draw_obj(self, obj):
+        if isinstance(obj, Prop) or isinstance(obj, Hero):
             if self.screen:
                 try:
                     cur_coord = obj.get_coord_normalized(self.height - obj.size[1])
@@ -48,21 +48,19 @@ class GameEngine:
     def spawn_prop(self, last_prop: Prop):
         BIRD = 2
         CACTUS = 1
-        distance = [5, 7, 10]
+        distance = [50, 75, 100]
         type_prop = randint(1, 2)
         instance_prop = None
-
         if type_prop == BIRD:
             instance_prop = Bird(BIRD_SIZE[0], BIRD_SIZE[1])
         if type_prop == CACTUS:
             instance_prop = Cactus(CACTUS_SIZE[0], CACTUS_SIZE[1])
-
         self.environment.spawn_prop(instance_prop, last_prop.coord[0] + last_prop.size[0] + distance[randint(0, 2)])
 
     def create_level(self):
         first_cactus = Cactus(CACTUS_SIZE[0], CACTUS_SIZE[1])
         self.environment.spawn_prop(first_cactus, 100)
-        for props in range(0, 9):
+        for props in range(0, 19):
             self.spawn_prop(self.environment.prop_list[len(self.environment.prop_list)-1])
 
     def draw_visible_obj(self):
@@ -93,6 +91,8 @@ class GameEngine:
             self.screen.fill((0, 0, 0))
             # self.hero.update()
             self.environment.update()
+            if len(self.environment.prop_list) < 20:
+                self.spawn_prop(self.environment.prop_list[len(self.environment.prop_list)-1])
             self.draw_visible_obj()
             pg.display.flip()
 
