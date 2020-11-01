@@ -28,8 +28,8 @@ class GameEngine:
         pg.init()
         self.visible_obj = []
 
-    def draw_obj(self, obj: PhysicalObject):
-        if isinstance(obj, PhysicalObject):
+    def draw_obj(self, obj: Prop):
+        if isinstance(obj, Prop):
             if self.screen:
                 try:
                     cur_coord = obj.get_coord_normalized(self.height - obj.size[1])
@@ -45,7 +45,7 @@ class GameEngine:
     def spawn_prop(self, last_prop: Prop):
         BIRD = 2
         CACTUS = 1
-        distance = [50, 75, 100]
+        distance = [5, 7, 10]
         type_prop = randint(1, 2)
         instance_prop = None
         if type_prop == BIRD:
@@ -57,8 +57,8 @@ class GameEngine:
     def create_level(self):
         first_cactus = Cactus(CACTUS_SIZE[0], CACTUS_SIZE[1])
         self.environment.spawn_prop(first_cactus, 100)
-        # for props in range(0, 9):
-        #     self.spawn_prop(self.environment.prop_list[len(self.environment.prop_list)-1])
+        for props in range(0, 9):
+            self.spawn_prop(self.environment.prop_list[len(self.environment.prop_list)-1])
 
     def draw_visible_obj(self):
         self.visible_obj = []

@@ -27,7 +27,7 @@ class Prop(PhysicalObject, IProp, ABC):
 
     @spawn_height.setter
     def spawn_height(self, height):
-        if height <= 0:
+        if height >= 0:
             self._spawn_height = 0
         else:
             self._spawn_height = height
@@ -43,7 +43,7 @@ class Prop(PhysicalObject, IProp, ABC):
 
 class Bird(Prop):
     # Bird
-    spawnheight = (0, 50)
+    spawnheight = (0, -25)
 
     def __init__(self, height: int, width: int):
         super().__init__(height, width)
