@@ -65,7 +65,7 @@ class GameEngine:
 
     def draw_visible_obj(self):
         self.visible_obj = []
-        # self.visible_obj.append(self.hero)
+        self.visible_obj.append(self.hero)
         for prop in self.environment.prop_list:
             if prop.coord[0] < self.width - prop.size[0]:
                 self.visible_obj.append(prop)
@@ -89,14 +89,16 @@ class GameEngine:
                     self.is_running = False
 
             pressed = pg.key.get_pressed()
-            key_arr = [pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT]
+            key_arr = [pg.K_UP, pg.K_DOWN]
             self.hero.change_state(pressed, key_arr)
 
             self.screen.fill((0, 0, 0))
-            # self.hero.update()
+            self.hero.update()
             self.environment.update()
+
             if len(self.environment.prop_list) < NUMBER_OF_EXISTING_PROP:
                 self.spawn_prop(self.environment.prop_list[len(self.environment.prop_list)-1])
+
             self.draw_visible_obj()
             pg.display.flip()
 

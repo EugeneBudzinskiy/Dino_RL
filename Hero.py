@@ -46,16 +46,16 @@ class Hero(PhysicalObject, ABC):
 
 
 class Human(Hero):
-    @staticmethod
-    def change_state(pressed_button, key_list: list):
+    def __init__(self):
+        super().__init__()
+        self.set_size(10, 10)
+
+    def change_state(self, pressed_button, key_list: list):
         if pressed_button[key_list[0]]:
-            print("up")
+            # up
+            self.set_state("jump")
         if pressed_button[key_list[1]]:
             print("down")
-        if pressed_button[key_list[2]]:
-            print("left")
-        if pressed_button[key_list[3]]:
-            print("right")
 
 
 class Agent(Hero):
