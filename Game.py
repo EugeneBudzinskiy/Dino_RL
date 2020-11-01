@@ -1,7 +1,7 @@
 import pygame as pg
 from Hero import Hero, Human
 from Env import Environment
-from PhysxObj import PhysicalObject
+# from PhysxObj import PhysicalObject
 from prop import Prop, Bird, Cactus
 from random import randint
 from config import *
@@ -47,17 +47,20 @@ class GameEngine:
     def spawn_prop(self, last_prop: Prop):
         type_prop = randint(1, BIRD_SPAWN_CHANCE)
         instance_prop = None
+
         if type_prop == BIRD_SPAWN_CHANCE:
             instance_prop = Bird(BIRD_SIZE[0], BIRD_SIZE[1])
         if type_prop != BIRD_SPAWN_CHANCE:
             instance_prop = Cactus(CACTUS_SIZE[0], CACTUS_SIZE[1])
+
         self.environment.spawn_prop(instance_prop,
-                                    last_prop.coord[0] + last_prop.size[0] + SPAWN_DISTANCE[randint(0, len(SPAWN_DISTANCE)-1)])
+                                    last_prop.coord[0] + last_prop.size[0] +
+                                    SPAWN_DISTANCE[randint(0, len(SPAWN_DISTANCE)-1)])
 
     def create_level(self):
         first_cactus = Cactus(CACTUS_SIZE[0], CACTUS_SIZE[1])
-        self.environment.spawn_prop(first_cactus, 100)
-        for props in range(0, 19):
+        self.environment.spawn_prop(first_cactus, FIRST_SPAWN_DISTANCE)
+        for props in range(0, NUMBER_OF_EXISTING_PROP):
             self.spawn_prop(self.environment.prop_list[len(self.environment.prop_list)-1])
 
     def draw_visible_obj(self):
@@ -92,11 +95,9 @@ class GameEngine:
             self.screen.fill((0, 0, 0))
             # self.hero.update()
             self.environment.update()
-            if len(self.environment.prop_list) < 20:
+            if len(self.environment.prop_list) < NUMBER_OF_EXISTING_PROP:
                 self.spawn_prop(self.environment.prop_list[len(self.environment.prop_list)-1])
             self.draw_visible_obj()
             pg.display.flip()
 
-            self.clock.tick(60)
-
-
+            self.clock.tick(FPS)
