@@ -8,10 +8,11 @@ class Prop(PhysicalObject, IProp, ABC):
     def __init__(self, height: int, width: int):
         super().__init__()
         self._prop_vel = 5
-        self._vel = (self._prop_vel, 0)
         self._spawn_height = 0
-        self.set_size(width, height)
         self.is_spawned = False
+
+        self.set_size(width, height)
+        self.set_vel(self._prop_vel, 0)
 
     @property
     def prop_vel(self):
