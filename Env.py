@@ -1,4 +1,3 @@
-from Interfaces import IProp
 from random import randint
 from config import *
 from prop import Bird, Cactus
@@ -16,7 +15,8 @@ class Environment:
         if type_prop == BIRD_SPAWN_CHANCE:
             instance_prop = Bird(BIRD_SIZE[0], BIRD_SIZE[1])
         if type_prop != BIRD_SPAWN_CHANCE:
-            instance_prop = Cactus(CACTUS_SIZE[0], CACTUS_SIZE[1])
+            type_cactus = randint(0, len(CACTUS_SIZE)-1)
+            instance_prop = Cactus(CACTUS_SIZE[type_cactus][0], CACTUS_SIZE[type_cactus][1])
         if len(self.__prop_list):
             instance_prop.spawn(self.__prop_list[len(self.__prop_list)-1].coord[0] +
                                 self.__prop_list[len(self.__prop_list)-1].size[0] +

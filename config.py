@@ -3,7 +3,7 @@ HEIGHT = 600
 FPS = 60
 
 BIRD_SIZE = tuple([15, 15])
-CACTUS_SIZE = tuple([25, 15])
+CACTUS_SIZE = [tuple([25, 25]), tuple([15, 25])]
 HERO_SIZE = tuple([30, 30])
 
 GLOBAL_OFFSET = 30

@@ -40,12 +40,12 @@ class Prop(PhysicalObject, IProp, ABC):
 
 
 class Bird(Prop):
-    def __init__(self, height: int, width: int):
+    def __init__(self, width: int, height: int):
         super().__init__(height, width)
         self.spawn_height = BIRD_SPAWN_HEIGHT[randint(0, len(BIRD_SPAWN_HEIGHT)-1)]
 
 
 class Cactus(Prop):
-    def __init__(self, height: int, width: int):
+    def __init__(self, width: int, height: int):
         super().__init__(height, width)
         self.spawn_height = 0
