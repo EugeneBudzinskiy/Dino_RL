@@ -1,10 +1,8 @@
 import pygame as pg
-from Hero import Hero, Human
+from Hero import Human
 from Env import Environment
-# from PhysxObj import PhysicalObject
-from prop import Prop, Bird, Cactus
-from random import randint
 from config import *
+from Graphics import Graphics
 
 
 class GameEngine:
@@ -24,25 +22,11 @@ class GameEngine:
             self.hero = Human()  # TODO replace Hero to Human
         else:
             self.hero = None  # TODO replace Hero to Agent
-
+        self.graphics = None
         self.environment = Environment()
         self.visible_obj = []
 
         pg.init()
-
-    def draw_obj(self, obj):
-        if isinstance(obj, Prop) or isinstance(obj, Hero):
-            if self.screen:
-                try:
-                    cur_coord = obj.get_coord_normalized(self.height - obj.size[1])
-                    pg.draw.rect(self.screen, (0, 128, 255),
-                                 pg.Rect(cur_coord[0], cur_coord[1], obj.size[0], obj.size[1]))
-                except:
-                    exit(500)
-            else:
-                raise Exception('Screen is not initialize.')
-        else:
-            raise Exception('Function draw_obj can`t draw this obj.')
 
     def create_level(self):
         self.environment.spawn_prop(FIRST_SPAWN_DISTANCE)
@@ -56,10 +40,11 @@ class GameEngine:
             if prop.coord[0] < self.width - prop.size[0]:
                 self.visible_obj.append(prop)
         for obj in self.visible_obj:
-            self.draw_obj(obj)
+            self.graphics.draw_obj(obj)
 
     def setup(self):
         self.screen = pg.display.set_mode((self.width, self.height))
+        self.graphics = Graphics(self.screen)
         self.create_level()
 
         self.clock = pg.time.Clock()
@@ -81,8 +66,6 @@ class GameEngine:
             self.screen.fill((0, 0, 0))
             self.hero.update()
             self.environment.update()
-
-
 
             self.draw_visible_obj()
             pg.display.flip()
