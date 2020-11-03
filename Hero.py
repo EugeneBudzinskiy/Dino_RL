@@ -64,9 +64,9 @@ class Human(Hero):
         super().__init__()
 
     def change_state(self, pressed_button, key_list: list):
-        if pressed_button[key_list[0]]:
+        if pressed_button[key_list[0]] or pressed_button[key_list[1]]:
             self._admire_state = 'jump'
-        elif pressed_button[key_list[1]]:
+        elif pressed_button[key_list[2]] or pressed_button[key_list[3]]:
             self._admire_state = 'sit'
         else:
             self._admire_state = 'nothing'
