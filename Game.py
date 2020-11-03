@@ -97,6 +97,10 @@ class GameEngine:
                 self.animation_counter += 1
             else:
                 wasted = Image(WASTED_IMAGE, [0, 0])
+                s = pg.Surface((self.width, self.width))  # the size of your rect
+                s.set_alpha(128)  # alpha level
+                s.fill((48, 34, 34))  # this fills the entire surface
+                self.screen.blit(s, (0, 0))
                 self.screen.blit(wasted.image, wasted.rect)
                 self.waiter_counter += 1
 
