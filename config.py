@@ -6,7 +6,7 @@ FPS = 60
 BIRD_SIZE = tuple([48, 48])
 CACTUS_SIZE = [tuple([64, 64]), tuple([40, 64])]
 HERO_SIZE = tuple([64, 64])
-HERO_SIT_SIZE = tuple([36, 88])
+HERO_SIT_SIZE = tuple([88, 36])
 
 GLOBAL_OFFSET = 30
 GROUND_LEVEL = 85
