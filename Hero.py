@@ -70,7 +70,6 @@ class Human(Hero):
             self._admire_state = 'sit'
         else:
             self._admire_state = 'nothing'
-        print(self._admire_state, self._state)
         self.update_state()
 
 
