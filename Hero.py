@@ -7,56 +7,53 @@ class Hero(PhysicalObject, ABC):
     def __init__(self):
         super().__init__()
         self._gravity_acc = -1
-        self._jump_vel = 10
-        self.delay = 0
+        self._jump_vel = 15
 
         self.set_size(HERO_SIZE[0], HERO_SIZE[1])
         self.set_acc(0, self._gravity_acc)
 
-        self._possible_states = ['nothing', 'fall', 'jump', 'sit']
-
-        self._state = self._possible_states[0]
-        self._action_queue = list()
+        self._state = 'nothing'
+        self._admire_state = 'nothing'
 
     def _squish(self):
-        self.set_size(HERO_SIZE[0], 10)
+        self.set_size(HERO_SIZE[0] + 10, 10)
 
     def _un_squish(self):
         self.set_size(HERO_SIZE[0], HERO_SIZE[1])
 
+    def _jump(self):
+        self.set_vel(0, self._jump_vel)
+
     def _fall(self):
-        self._state = "fall"
         self.set_acc(0, self._gravity_acc)
 
-    def _jump(self):
-        if self._state == "nothing":
-            self._state = "jump"
-            self.set_vel(0, self._jump_vel)
-        self._fall()
-
-    def _sit(self):
-        self._squish()
-        if self._state == "fall":
-            self.set_acc(0, self._gravity_acc * 10)
-        else:
-            self._state = "sit"
+    def _quick_fall(self):
+        self.set_acc(0, self._gravity_acc * 5)
 
     def get_state(self):
         return self._state
 
     def update_state(self):
-        if self._state == "sit":
-            self.delay += 1
-            if self.delay == 10:
-                self.delay = 0
-                self._state = "nothing"
+        if self._admire_state == 'nothing':
+            if self.coord[1] >= 0:
+                if self._state == 'squish':
+                    self._un_squish()
+                self._state = 'nothing'
+                self._fall()
 
-        if self.coord[1] == 0:
-            if self._state == "nothing":
-                self._un_squish()
+        elif self._admire_state == 'jump':
+            if self._state == 'nothing':
+                self._jump()
+                self._fall()
+                self._state = 'jump'
 
-            if self._state == "fall":
-                self._state = "nothing"
+        elif self._admire_state == 'sit':
+            if self._state == 'jump':
+                self._quick_fall()
+                self._state = 'quick-fall'
+            elif self._state == 'nothing' or self._state == 'quick-fall' and self.coord[1] >= 0:
+                self._squish()
+                self._state = 'squish'
 
 
 class Human(Hero):
@@ -65,9 +62,11 @@ class Human(Hero):
 
     def change_state(self, pressed_button, key_list: list):
         if pressed_button[key_list[0]]:
-            self._jump()
-        if pressed_button[key_list[1]]:
-            self._sit()
+            self._admire_state = 'jump'
+        elif pressed_button[key_list[1]]:
+            self._admire_state = 'sit'
+        else:
+            self._admire_state = 'nothing'
         self.update_state()
 
 
