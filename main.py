@@ -1,9 +1,9 @@
-from Game import GameEngine
+from menu import GameMenu
 
 
 def main():
-    game = GameEngine()
-    game.setup()
+    menu = GameMenu()
+    menu.start_menu()
 
 
 if __name__ == '__main__':

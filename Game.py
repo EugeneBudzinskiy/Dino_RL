@@ -14,8 +14,6 @@ class GameEngine:
         self.human = None
         self.agent = None
         self.clock = None
-        self.screen = None
-        self.graphics = None
 
         self.width = WIDTH
         self.height = HEIGHT
@@ -27,7 +25,8 @@ class GameEngine:
 
         self.environment = Environment()
         self.visible_obj = []
-
+        self.screen = pg.display.set_mode((self.width, self.height))
+        self.graphics = Graphics(self.screen)
         pg.init()
 
     def create_level(self):
@@ -47,10 +46,7 @@ class GameEngine:
             self.graphics.draw_obj(obj)
 
     def setup(self):
-        self.screen = pg.display.set_mode((self.width, self.height))
-        self.graphics = Graphics(self.screen)
         self.create_level()
-
         self.clock = pg.time.Clock()
 
         self.is_running = True
