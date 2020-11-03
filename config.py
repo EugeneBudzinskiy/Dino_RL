@@ -9,7 +9,7 @@ HERO_SIZE = tuple([64, 64])
 HERO_SIT_SIZE = tuple([36, 88])
 
 GLOBAL_OFFSET = 30
-GROUND_LEVEL = 10
+GROUND_LEVEL = 85
 FIRST_SPAWN_DISTANCE = HERO_SIZE[0] * 10
 NUMBER_OF_EXISTING_PROP = 20
 
@@ -29,3 +29,4 @@ for i in range(1, 7):
 
 CACTUS_IMAGE = [os.path.join("texture", 'Cactus1.png'), os.path.join("texture", 'Cactus2.png')]
 BIRD_IMAGE = [os.path.join("texture", 'Bird-1.png'), os.path.join("texture", 'Bird-2.png')]
+WASTED_IMAGE = [os.path.join("texture", "wasted-1.png")]

@@ -1,20 +1,22 @@
 import pygame as pg
-from Hero import Human
+from Hero import Human,Hero
 from Env import Environment
 from config import *
 from Graphics import Graphics
+from image import Image
 from CollisionLogic import CollisionLogic
-
+from prop import Cactus,Bird
 
 class GameEngine:
     def __init__(self):
         self.is_running = False
         self.human_player = True
 
+        self.counter = 0
+
         self.human = None
         self.agent = None
         self.clock = None
-
         self.width = WIDTH
         self.height = HEIGHT
 
@@ -27,6 +29,9 @@ class GameEngine:
         self.visible_obj = []
         self.screen = pg.display.set_mode((self.width, self.height))
         self.graphics = Graphics(self.screen)
+        self.bg_image = []
+        for image in BACKGROUND_IMAGE:
+            self.bg_image.append(Image(image, [0, 0]))
         pg.init()
 
     def create_level(self):
@@ -43,7 +48,12 @@ class GameEngine:
                 self.visible_obj.append(prop)
 
         for obj in self.visible_obj:
-            self.graphics.draw_obj(obj)
+            if isinstance(obj, Hero):
+                self.graphics.draw_obj(obj, (self.counter//5) % 6)
+            elif isinstance(obj, Cactus):
+                self.graphics.draw_obj(obj, 0)
+            elif isinstance(obj, Bird):
+                self.graphics.draw_obj(obj,(self.counter//12) % 2)
 
     def setup(self):
         self.create_level()
@@ -72,7 +82,7 @@ class GameEngine:
                     self.is_running = False
 
             self.screen.fill((0, 0, 0))
-
+            self.screen.blit(self.bg_image[(self.counter//5) % 12].image, self.bg_image[(self.counter//5) % 12].rect)
             if self.collision_stuff():
                 self.is_running = False
 
@@ -82,6 +92,9 @@ class GameEngine:
             self.environment.update()
 
             self.draw_visible_obj()
+            self.counter += 1
+            if self.counter == 60:
+                self.counter = 0
             pg.display.flip()
 
             self.clock.tick(FPS)

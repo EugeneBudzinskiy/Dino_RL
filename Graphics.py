@@ -8,13 +8,13 @@ class Graphics:
     def __init__(self, screen):
         self.screen = screen
 
-    def draw_obj(self, obj):
+    def draw_obj(self, obj, i):
         if isinstance(obj, Prop) or isinstance(obj, Hero):
             if self.screen:
                 try:
                     cur_coord = obj.get_coord_normalized(HEIGHT - obj.size[1])
-                    pg.draw.rect(self.screen, (0, 128, 255),
-                                 pg.Rect(cur_coord[0], cur_coord[1], obj.size[0], obj.size[1]))
+                    obj.texture[i].change_location([cur_coord[0], cur_coord[1]])
+                    self.screen.blit(obj.texture[i].image, obj.texture[i].rect)
                 except pg.error:
                     exit(500)
             else:
@@ -23,10 +23,4 @@ class Graphics:
             raise Exception('Function draw_obj can`t draw this obj.')
 
 
-class Image(pg.sprite.Sprite):
-    def __init__(self, image_file, location):
-        pg.sprite.Sprite.__init__(self)
-        self.image = pg.image.load(image_file)
-        self.rect = self.image.get_rect()
-        self.rect.left, self.rect.top = location
 

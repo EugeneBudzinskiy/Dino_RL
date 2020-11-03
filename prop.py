@@ -2,7 +2,8 @@ from abc import ABC
 from PhysxObj import PhysicalObject
 from random import randint
 from Interfaces import IProp
-from config import BIRD_SPAWN_HEIGHT
+from config import BIRD_SPAWN_HEIGHT, BIRD_IMAGE, CACTUS_IMAGE, CACTUS_SIZE
+from image import Image
 
 
 class Prop(PhysicalObject, IProp, ABC):
@@ -11,7 +12,7 @@ class Prop(PhysicalObject, IProp, ABC):
         self._prop_vel = 5
         self._spawn_height = 0
         self.is_spawned = False
-
+        self.texture = None
         self.set_size(width, height)
         self.set_vel(self._prop_vel, 0)
 
@@ -42,10 +43,18 @@ class Prop(PhysicalObject, IProp, ABC):
 class Bird(Prop):
     def __init__(self, width: int, height: int):
         super().__init__(height, width)
+        self.texture = []
+        for image in BIRD_IMAGE:
+            self.texture.append(Image(image, self.coord))
         self.spawn_height = BIRD_SPAWN_HEIGHT[randint(0, len(BIRD_SPAWN_HEIGHT)-1)]
 
 
 class Cactus(Prop):
     def __init__(self, width: int, height: int):
         super().__init__(height, width)
+        self.texture = []
+        if width == CACTUS_SIZE[0][0]:
+            self.texture.append(Image(CACTUS_IMAGE[0], self.coord))
+        elif width == CACTUS_SIZE[1][0]:
+            self.texture.append(Image(CACTUS_IMAGE[1], self.coord))
         self.spawn_height = 0
