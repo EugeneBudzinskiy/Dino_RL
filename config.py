@@ -29,4 +29,4 @@ for i in range(1, 7):
 
 CACTUS_IMAGE = [os.path.join("texture", 'Cactus1.png'), os.path.join("texture", 'Cactus2.png')]
 BIRD_IMAGE = [os.path.join("texture", 'Bird-1.png'), os.path.join("texture", 'Bird-2.png')]
-WASTED_IMAGE = [os.path.join("texture", "wasted-1.png")]
+WASTED_IMAGE = os.path.join("texture", "wasted-1.png")

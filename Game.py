@@ -1,18 +1,20 @@
 import pygame as pg
-from Hero import Human,Hero
+from Hero import Human, Hero
 from Env import Environment
 from config import *
 from Graphics import Graphics
 from image import Image
 from CollisionLogic import CollisionLogic
-from prop import Cactus,Bird
+from prop import Cactus, Bird
+
 
 class GameEngine:
     def __init__(self):
         self.is_running = False
         self.human_player = True
 
-        self.counter = 0
+        self.animation_counter = 0
+        self.waiter_counter = 0
 
         self.human = None
         self.agent = None
@@ -49,11 +51,11 @@ class GameEngine:
 
         for obj in self.visible_obj:
             if isinstance(obj, Hero):
-                self.graphics.draw_obj(obj, (self.counter//5) % 6)
+                self.graphics.draw_obj(obj, (self.animation_counter // 5) % 6)
             elif isinstance(obj, Cactus):
                 self.graphics.draw_obj(obj, 0)
             elif isinstance(obj, Bird):
-                self.graphics.draw_obj(obj,(self.counter//12) % 2)
+                self.graphics.draw_obj(obj, (self.animation_counter // 12) % 2)
 
     def setup(self):
         self.create_level()
@@ -75,26 +77,31 @@ class GameEngine:
         return col_log.check_collision(self.hero, cur_prop)
 
     def update(self):
-        while self.is_running:
-
+        while self.is_running or self.waiter_counter <= FPS*2:
+            self.screen.fill((0, 0, 0))
+            self.screen.blit(self.bg_image[(self.animation_counter // 5) % 12].image,
+                             self.bg_image[(self.animation_counter // 5) % 12].rect)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.is_running = False
 
-            self.screen.fill((0, 0, 0))
-            self.screen.blit(self.bg_image[(self.counter//5) % 12].image, self.bg_image[(self.counter//5) % 12].rect)
             if self.collision_stuff():
                 self.is_running = False
 
-            self.key_checker()
-            self.hero.update()
+            if self.is_running:
+                self.key_checker()
+                self.hero.update()
 
-            self.environment.update()
+                self.environment.update()
+
+                self.animation_counter += 1
+            else:
+                wasted = Image(WASTED_IMAGE, [0, 0])
+                self.screen.blit(wasted.image, wasted.rect)
+                self.waiter_counter += 1
 
             self.draw_visible_obj()
-            self.counter += 1
-            if self.counter == 60:
-                self.counter = 0
+            if self.animation_counter == FPS:
+                self.animation_counter = 0
             pg.display.flip()
-
             self.clock.tick(FPS)
