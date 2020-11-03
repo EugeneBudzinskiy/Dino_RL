@@ -42,7 +42,8 @@ class Hero(PhysicalObject, ABC):
                 self._fall()
 
         elif self._admire_state == 'jump':
-            if self._state == 'nothing':
+            if self._state == 'nothing' or self._state == 'squish':
+                self._un_squish()
                 self._jump()
                 self._fall()
                 self._state = 'jump'
