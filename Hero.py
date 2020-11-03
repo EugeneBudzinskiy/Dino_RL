@@ -74,4 +74,7 @@ class Human(Hero):
 
 
 class Agent(Hero):
-    pass
+    def __init__(self):
+        super().__init__()
+
+        self.brain = None
