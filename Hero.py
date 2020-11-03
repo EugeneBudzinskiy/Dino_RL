@@ -1,6 +1,6 @@
 from abc import ABC
 from PhysxObj import PhysicalObject
-from config import HERO_SIZE,DINO_SIT_IMAGE,DINO_IMAGE
+from config import HERO_SIZE,DINO_SIT_IMAGE, DINO_IMAGE, HERO_SIT_SIZE
 from image import Image
 
 
@@ -17,9 +17,8 @@ class Hero(PhysicalObject, ABC):
         self._admire_state = 'nothing'
         self.texture = []
 
-
     def _squish(self):
-        self.set_size(HERO_SIZE[0] + 10, 10)
+        self.set_size(HERO_SIT_SIZE[0], HERO_SIT_SIZE[1])
 
     def _un_squish(self):
         self.set_size(HERO_SIZE[0], HERO_SIZE[1])
