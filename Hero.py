@@ -47,6 +47,8 @@ class Hero(PhysicalObject, ABC):
                 self._jump()
                 self._fall()
                 self._state = 'jump'
+            elif self.coord[1] >= 0 and self._state == 'jump':
+                self._state = 'nothing'
 
         elif self._admire_state == 'sit':
             if self._state == 'jump':
@@ -68,6 +70,7 @@ class Human(Hero):
             self._admire_state = 'sit'
         else:
             self._admire_state = 'nothing'
+        print(self._admire_state, self._state)
         self.update_state()
 
 
