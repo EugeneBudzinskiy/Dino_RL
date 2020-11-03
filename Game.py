@@ -78,7 +78,7 @@ class GameEngine:
             self.screen.fill((0, 0, 0))
 
             if self.collision_stuff():
-                print(1)
+                self.is_running = False
 
             self.key_checker()
             self.hero.update()

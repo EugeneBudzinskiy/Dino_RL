@@ -15,7 +15,7 @@ class Graphics:
                     cur_coord = obj.get_coord_normalized(HEIGHT - obj.size[1])
                     pg.draw.rect(self.screen, (0, 128, 255),
                                  pg.Rect(cur_coord[0], cur_coord[1], obj.size[0], obj.size[1]))
-                except:
+                except pg.error:
                     exit(500)
             else:
                 raise Exception('Screen is not initialize.')
