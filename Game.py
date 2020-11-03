@@ -15,6 +15,7 @@ class GameEngine:
 
         self.animation_counter = 0
         self.waiter_counter = 0
+        self.score = 0
 
         self.human = None
         self.agent = None
@@ -77,7 +78,7 @@ class GameEngine:
         return col_log.check_collision(self.hero, cur_prop)
 
     def update(self):
-        while self.is_running or self.waiter_counter <= FPS*2:
+        while self.is_running or self.waiter_counter <= FPS * 2:
             self.screen.fill((0, 0, 0))
             self.screen.blit(self.bg_image[(self.animation_counter // 5) % 12].image,
                              self.bg_image[(self.animation_counter // 5) % 12].rect)
@@ -91,9 +92,12 @@ class GameEngine:
             if self.is_running:
                 self.key_checker()
                 self.hero.update()
-
+                if self.animation_counter % 10 == 0:
+                    self.score += 1
                 self.environment.update()
-
+                f1 = pg.font.Font(None, 36)
+                text1 = f1.render("Score: {}".format(self.score), True, (255, 255, 255))
+                self.screen.blit(text1, (980, 50))
                 self.animation_counter += 1
             else:
                 wasted = Image(WASTED_IMAGE, [0, 0])
