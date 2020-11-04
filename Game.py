@@ -78,26 +78,27 @@ class GameEngine:
         return col_log.check_collision(self.hero, cur_prop)
 
     def update(self):
-        while self.is_running or self.waiter_counter <= FPS * 2:
+        while self.is_running or self.waiter_counter <= FPS * 4:
             self.screen.fill((0, 0, 0))
             self.screen.blit(self.bg_image[(self.animation_counter // 5) % 12].image,
                              self.bg_image[(self.animation_counter // 5) % 12].rect)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.is_running = False
+                    self.waiter_counter = FPS * 4
 
             if self.collision_stuff():
                 self.is_running = False
-
+            f1 = pg.font.Font(None, 36)
+            text1 = f1.render("Score: {}".format(self.score), True, (255, 255, 255))
+            self.screen.blit(text1, (980, 50))
             if self.is_running:
                 self.key_checker()
                 self.hero.update()
                 if self.animation_counter % 10 == 0:
                     self.score += 1
                 self.environment.update()
-                f1 = pg.font.Font(None, 36)
-                text1 = f1.render("Score: {}".format(self.score), True, (255, 255, 255))
-                self.screen.blit(text1, (980, 50))
+
                 self.animation_counter += 1
             else:
                 wasted = Image(WASTED_IMAGE, [0, 0])
@@ -107,6 +108,10 @@ class GameEngine:
                 self.screen.blit(s, (0, 0))
                 self.screen.blit(wasted.image, wasted.rect)
                 self.waiter_counter += 1
+                text2 = f1.render("Press SPACE to continue.", True, (186, 186, 186))
+                self.screen.blit(text2, (500, 650))
+                if pg.key.get_pressed()[pg.K_SPACE]:
+                    break
 
             self.draw_visible_obj()
             if self.animation_counter == FPS:

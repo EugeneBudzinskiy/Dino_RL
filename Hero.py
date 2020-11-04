@@ -65,8 +65,6 @@ class Human(Hero):
     def __init__(self):
         super().__init__()
 
-
-
     def change_state(self, pressed_button, key_list: list):
         if pressed_button[key_list[0]] or pressed_button[key_list[1]]:
             self._admire_state = 'jump'
