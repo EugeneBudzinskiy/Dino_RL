@@ -77,8 +77,6 @@ class GameEngine:
         return col_log.check_collision(self.hero, cur_prop)
 
     def update(self):
-        rect = pg.Rect((0, self.height-(GROUND_LEVEL + 50), self.width, self.height))
-        rect1 = pg.Rect((0, self.height/2, GLOBAL_OFFSET+HERO_SIT_SIZE[0], self.height))
         while self.is_running or self.waiter_counter <= FPS * 4:
             self.graphics.draw_background(self.animation_counter)
 
@@ -112,5 +110,5 @@ class GameEngine:
             self.draw_visible_obj()
             if self.animation_counter == FPS:
                 self.animation_counter = 0
-            pg.display.update([rect, rect1])
+            pg.display.update()
             self.clock.tick(FPS)
