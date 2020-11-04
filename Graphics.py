@@ -27,10 +27,25 @@ class Graphics:
         else:
             raise Exception('Function draw_obj can`t draw this obj.')
 
-    def draw_background(self, anim_counter):
+    def draw_background(self, anim_counter, is_hero):
         self.screen.fill((0, 0, 0))
-        self.screen.blit(self.bg_image[(anim_counter // 5) % 12].image,
-                         self.bg_image[(anim_counter // 5) % 12].rect)
+        if is_hero:
+            self.screen.blit(self.bg_image[(anim_counter // 5) % 12].image,
+                             self.bg_image[(anim_counter // 5) % 12].rect)
+
+    def draw_obj_without_image(self, obj):
+        if isinstance(obj, Prop) or isinstance(obj, Hero):
+            if self.screen:
+                try:
+                    cur_coord = obj.get_coord_normalized(HEIGHT - obj.size[1])
+                    pg.draw.rect(self.screen, (0, 128, 255),
+                                 pg.Rect(cur_coord[0], cur_coord[1], obj.size[0], obj.size[1]))
+                except:
+                    exit(500)
+            else:
+                raise Exception('Screen is not initialize.')
+        else:
+            raise Exception('Function draw_obj can`t draw this obj.')
 
     def draw_text(self, text: str, coord: tuple, color: tuple):
         f1 = pg.font.Font(None, 36)

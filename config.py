@@ -6,6 +6,9 @@ WIDTH = 1280
 HEIGHT = 720
 FPS = 60
 
+HUMAN = 0
+AGENT = 1
+
 BIRD_SIZE = tuple([48, 48])
 CACTUS_SIZE = [tuple([64, 64]), tuple([40, 64])]
 HERO_SIZE = tuple([64, 64])

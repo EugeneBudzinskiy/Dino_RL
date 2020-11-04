@@ -1,13 +1,13 @@
 from CollisionLogic import CollisionLogic
 from Env import Environment
 from Graphics import Graphics
-from Hero import Human, Hero
+from Hero import Human, Hero,Agent
 from config import *
 from prop import Cactus, Bird
 
 
 class GameEngine:
-    def __init__(self):
+    def __init__(self, mode):
         self.is_running = False
         self.human_player = True
 
@@ -15,13 +15,13 @@ class GameEngine:
         self.waiter_counter = 0
         self.score = 0
 
-        self.human = None
-        self.agent = None
+        # self.human = None
+        # self.agent = None
         self.clock = None
         self.width = WIDTH
         self.height = HEIGHT
 
-        if self.human_player:
+        if mode == HUMAN:
             self.hero = Human()
         else:
             self.hero = None  # TODO replace Hero to Agent
@@ -46,7 +46,9 @@ class GameEngine:
                 self.visible_obj.append(prop)
 
         for obj in self.visible_obj:
-            if isinstance(obj, Hero):
+            if isinstance(self.hero, Agent):
+                self.graphics.draw_obj_without_image(obj)
+            elif isinstance(obj, Hero):
                 self.graphics.draw_obj(obj, (self.animation_counter // 5) % 6)
             elif isinstance(obj, Cactus):
                 if not obj.is_visible:
@@ -78,7 +80,7 @@ class GameEngine:
 
     def update(self):
         while self.is_running or self.waiter_counter <= FPS * 4:
-            self.graphics.draw_background(self.animation_counter)
+            self.graphics.draw_background(self.animation_counter, isinstance(self.hero, Human))
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
