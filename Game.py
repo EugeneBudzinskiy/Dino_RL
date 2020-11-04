@@ -32,9 +32,7 @@ class GameEngine:
         self.visible_obj = []
         self.screen = pg.display.set_mode((self.width, self.height))
         self.graphics = Graphics(self.screen)
-        self.bg_image = []
-        for image in BACKGROUND_IMAGE:
-            self.bg_image.append(Image(image, [0, 0]))
+
         pg.init()
 
     def create_level(self):
@@ -79,9 +77,7 @@ class GameEngine:
 
     def update(self):
         while self.is_running or self.waiter_counter <= FPS * 4:
-            self.screen.fill((0, 0, 0))
-            self.screen.blit(self.bg_image[(self.animation_counter // 5) % 12].image,
-                             self.bg_image[(self.animation_counter // 5) % 12].rect)
+            self.graphics.draw_background(self.animation_counter)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.is_running = False
@@ -89,9 +85,9 @@ class GameEngine:
 
             if self.collision_stuff():
                 self.is_running = False
-            f1 = pg.font.Font(None, 36)
-            text1 = f1.render("Score: {}".format(self.score), True, (255, 255, 255))
-            self.screen.blit(text1, (980, 50))
+
+            self.graphics.draw_text("Score:{}".format(self.score), (980, 50), (255, 255, 255))
+
             if self.is_running:
                 self.key_checker()
                 self.hero.update()
@@ -101,15 +97,8 @@ class GameEngine:
 
                 self.animation_counter += 1
             else:
-                wasted = Image(WASTED_IMAGE, [0, 0])
-                s = pg.Surface((self.width, self.width))  # the size of your rect
-                s.set_alpha(128)  # alpha level
-                s.fill((48, 34, 34))  # this fills the entire surface
-                self.screen.blit(s, (0, 0))
-                self.screen.blit(wasted.image, wasted.rect)
                 self.waiter_counter += 1
-                text2 = f1.render("Press SPACE to continue.", True, (186, 186, 186))
-                self.screen.blit(text2, (500, 650))
+                self.graphics.draw_wasted_screen()
                 if pg.key.get_pressed()[pg.K_SPACE]:
                     break
 

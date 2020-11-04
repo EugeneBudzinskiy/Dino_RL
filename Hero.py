@@ -65,22 +65,27 @@ class Human(Hero):
     def __init__(self):
         super().__init__()
 
-    def change_state(self, pressed_button, key_list: list):
-        if pressed_button[key_list[0]] or pressed_button[key_list[1]]:
-            self._admire_state = 'jump'
-            self.texture = []
-            for image in DINO_IMAGE:
-                self.texture.append(Image(image, self.coord))
-        elif pressed_button[key_list[2]] or pressed_button[key_list[3]]:
-            self._admire_state = 'sit'
-            self.texture = []
+    def change_textures(self):
+        self.texture = []
+        if self._admire_state == 'sit':
             for image in DINO_SIT_IMAGE:
                 self.texture.append(Image(image, self.coord))
         else:
-            self._admire_state = 'nothing'
-            self.texture = []
             for image in DINO_IMAGE:
                 self.texture.append(Image(image, self.coord))
+
+    def change_state(self, pressed_button, key_list: list):
+        if pressed_button[key_list[0]] or pressed_button[key_list[1]]:
+            self._admire_state = 'jump'
+
+        elif pressed_button[key_list[2]] or pressed_button[key_list[3]]:
+            self._admire_state = 'sit'
+            self.texture = []
+
+        else:
+            self._admire_state = 'nothing'
+            self.texture = []
+        self.change_textures()
         self.update_state()
 
 

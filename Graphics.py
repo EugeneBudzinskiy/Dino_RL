@@ -1,12 +1,16 @@
 from prop import Prop
 from Hero import Hero
-from config import HEIGHT
+from config import HEIGHT, BACKGROUND_IMAGE, WIDTH, WASTED_IMAGE
 import pygame as pg
+from image import Image
 
 
 class Graphics:
     def __init__(self, screen):
         self.screen = screen
+        self.bg_image = []
+        for image in BACKGROUND_IMAGE:
+            self.bg_image.append(Image(image, [0, 0]))
 
     def draw_obj(self, obj, i):
         if isinstance(obj, Prop) or isinstance(obj, Hero):
@@ -22,5 +26,21 @@ class Graphics:
         else:
             raise Exception('Function draw_obj can`t draw this obj.')
 
+    def draw_background(self, anim_counter):
+        self.screen.fill((0, 0, 0))
+        self.screen.blit(self.bg_image[(anim_counter // 5) % 12].image,
+                         self.bg_image[(anim_counter // 5) % 12].rect)
 
+    def draw_text(self, text: str, coord: tuple, color: tuple):
+        f1 = pg.font.Font(None, 36)
+        text_r = f1.render(text, True, color)
+        self.screen.blit(text_r, coord)
 
+    def draw_wasted_screen(self):
+        s = pg.Surface((WIDTH, HEIGHT))
+        s.set_alpha(128)
+        s.fill((48, 34, 34))
+        wasted = Image(WASTED_IMAGE, [0, 0])
+        self.screen.blit(s, (0, 0))
+        self.screen.blit(wasted.image, wasted.rect)
+        self.draw_text("Press SPACE to continue.",(500, 650),(186, 186, 186))
