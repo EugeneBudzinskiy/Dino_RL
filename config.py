@@ -1,4 +1,6 @@
 import os
+import pygame as pg
+
 WIDTH = 1280
 HEIGHT = 720
 FPS = 60
@@ -15,18 +17,18 @@ NUMBER_OF_EXISTING_PROP = 20
 
 SPAWN_DISTANCE = [HERO_SIZE[0] * 8, HERO_SIZE[0] * 9, HERO_SIZE[0] * 10]
 BIRD_SPAWN_CHANCE = 10  # 1/10
-BIRD_SPAWN_HEIGHT = (-16, -38)
+BIRD_SPAWN_HEIGHT = (-16, -38, -65)
 
 BACKGROUND_IMAGE = []
 DINO_SIT_IMAGE = []
 DINO_IMAGE = []
 for i in range(1, 13):
-    BACKGROUND_IMAGE.append(os.path.join("texture", 'BG-{}.png'.format(i)))
+    BACKGROUND_IMAGE.append(pg.image.load(os.path.join("texture", 'BG-{}.png'.format(i))))
 
 for i in range(1, 7):
-    DINO_SIT_IMAGE.append(os.path.join("texture", 'DinoSit-{}.png'.format(i)))
-    DINO_IMAGE.append(os.path.join("texture", 'Dino-{}.png'.format(i)))
+    DINO_SIT_IMAGE.append(pg.image.load(os.path.join("texture", 'DinoSit-{}.png'.format(i))))
+    DINO_IMAGE.append(pg.image.load(os.path.join("texture", 'Dino-{}.png'.format(i))))
 
-CACTUS_IMAGE = [os.path.join("texture", 'Cactus1.png'), os.path.join("texture", 'Cactus2.png')]
-BIRD_IMAGE = [os.path.join("texture", 'Bird-1.png'), os.path.join("texture", 'Bird-2.png')]
-WASTED_IMAGE = os.path.join("texture", "wasted-1.png")
+CACTUS_IMAGE = [pg.image.load(os.path.join("texture", 'Cactus1.png')), pg.image.load(os.path.join("texture", 'Cactus2.png'))]
+BIRD_IMAGE = [pg.image.load(os.path.join("texture", 'Bird-1.png')), pg.image.load(os.path.join("texture", 'Bird-2.png'))]
+WASTED_IMAGE = pg.image.load(os.path.join("texture", "wasted-1.png"))

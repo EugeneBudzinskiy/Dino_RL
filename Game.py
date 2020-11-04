@@ -5,7 +5,6 @@ from config import *
 from Graphics import Graphics
 from CollisionLogic import CollisionLogic
 from prop import Cactus, Bird
-import time
 
 
 class GameEngine:
@@ -81,6 +80,7 @@ class GameEngine:
     def update(self):
         while self.is_running or self.waiter_counter <= FPS * 4:
             self.graphics.draw_background(self.animation_counter)
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.is_running = False
@@ -92,8 +92,10 @@ class GameEngine:
             self.graphics.draw_text("Score:{}".format(self.score), (980, 50), (255, 255, 255))
 
             if self.is_running:
+
                 self.key_checker()
                 self.hero.update()
+
                 if self.animation_counter % 10 == 0:
                     self.score += 1
                 self.environment.update()
