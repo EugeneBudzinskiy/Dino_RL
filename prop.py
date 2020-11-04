@@ -11,9 +11,12 @@ class Prop(PhysicalObject, IProp, ABC):
         super().__init__()
         self._prop_vel = 5
         self._spawn_height = 0
+
         self.is_spawned = False
         self.texture = None
+
         self.set_size(width, height)
+        self.set_col_size(int(width * .75), int(height * .75))
         self.set_vel(self._prop_vel, 0)
 
     @property

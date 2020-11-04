@@ -9,6 +9,7 @@ class PhysicalObject(IPhysicalObject, ABC):
         self._vel = (0, 0)    # X|Y
         self._acc = (0, 0)    # X|Y
         self._size = (0, 0)   # W|H
+        self._col_size = (0, 0)   # W|H
 
     @property
     def coord(self):
@@ -26,6 +27,10 @@ class PhysicalObject(IPhysicalObject, ABC):
     def size(self):
         return self._size
 
+    @property
+    def col_size(self):
+        return self._col_size
+
     def get_coord_normalized(self, height: int):
         return self._coord[0] + GLOBAL_OFFSET, self._coord[1] + height - GROUND_LEVEL
 
@@ -40,6 +45,9 @@ class PhysicalObject(IPhysicalObject, ABC):
 
     def set_size(self, width: int, height: int):
         self._size = (width, height)
+
+    def set_col_size(self, col_width: int, col_height: int):
+        self._col_size = (col_width, col_height)
 
     def update(self):
         c_acc_x = self._acc[0]

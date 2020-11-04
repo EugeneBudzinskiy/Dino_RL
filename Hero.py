@@ -8,9 +8,10 @@ class Hero(PhysicalObject, ABC):
     def __init__(self):
         super().__init__()
         self._gravity_acc = -1
-        self._jump_vel = 15
+        self._jump_vel = 20
 
         self.set_size(HERO_SIZE[0], HERO_SIZE[1])
+        self.set_col_size(int(HERO_SIZE[0] * .75), int(HERO_SIZE[1] * .75))
         self.set_acc(0, self._gravity_acc)
 
         self._state = 'nothing'
@@ -37,7 +38,7 @@ class Hero(PhysicalObject, ABC):
 
     def change_textures(self):
         self.texture = []
-        if self._admire_state == 'sit':
+        if self._state == 'squish':
             for image in DINO_SIT_IMAGE:
                 self.texture.append(Image(image, self.coord))
         else:
