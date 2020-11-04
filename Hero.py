@@ -35,6 +35,15 @@ class Hero(PhysicalObject, ABC):
     def get_state(self):
         return self._state
 
+    def change_textures(self):
+        self.texture = []
+        if self._admire_state == 'sit':
+            for image in DINO_SIT_IMAGE:
+                self.texture.append(Image(image, self.coord))
+        else:
+            for image in DINO_IMAGE:
+                self.texture.append(Image(image, self.coord))
+
     def update_state(self):
         if self._admire_state == 'nothing':
             if self.coord[1] >= 0:
@@ -59,20 +68,12 @@ class Hero(PhysicalObject, ABC):
             elif self._state == 'nothing' or self._state == 'quick-fall' and self.coord[1] >= 0:
                 self._squish()
                 self._state = 'squish'
+        self.change_textures()
 
 
 class Human(Hero):
     def __init__(self):
         super().__init__()
-
-    def change_textures(self):
-        self.texture = []
-        if self._admire_state == 'sit':
-            for image in DINO_SIT_IMAGE:
-                self.texture.append(Image(image, self.coord))
-        else:
-            for image in DINO_IMAGE:
-                self.texture.append(Image(image, self.coord))
 
     def change_state(self, pressed_button, key_list: list):
         if pressed_button[key_list[0]] or pressed_button[key_list[1]]:
@@ -85,7 +86,6 @@ class Human(Hero):
         else:
             self._admire_state = 'nothing'
             self.texture = []
-        self.change_textures()
         self.update_state()
 
 
