@@ -1,6 +1,6 @@
 from abc import ABC
 from PhysxObj import PhysicalObject
-from config import HERO_SIZE,DINO_SIT_IMAGE, DINO_IMAGE, HERO_SIT_SIZE
+from config import HERO_SIZE, DINO_SIT_IMAGE, DINO_IMAGE, HERO_SIT_SIZE
 from image import Image
 
 
@@ -81,11 +81,10 @@ class Human(Hero):
 
         elif pressed_button[key_list[2]] or pressed_button[key_list[3]]:
             self._admire_state = 'sit'
-            self.texture = []
 
         else:
             self._admire_state = 'nothing'
-            self.texture = []
+
         self.update_state()
 
 
