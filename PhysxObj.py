@@ -1,4 +1,5 @@
 from abc import ABC
+
 from Interfaces import IPhysicalObject
 from config import GLOBAL_OFFSET, GROUND_LEVEL
 

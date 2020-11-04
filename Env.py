@@ -1,4 +1,5 @@
 from random import randint
+
 from config import *
 from prop import Bird, Cactus
 

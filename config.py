@@ -1,4 +1,5 @@
 import os
+
 import pygame as pg
 
 WIDTH = 1280

@@ -1,4 +1,5 @@
 from abc import ABC
+
 from PhysxObj import PhysicalObject
 from config import HERO_SIZE, DINO_SIT_IMAGE, DINO_IMAGE, HERO_SIT_SIZE
 from image import Image

@@ -1,5 +1,6 @@
-from Game import GameEngine
 import pygame_menu
+
+from Game import GameEngine
 
 
 class GameMenu:

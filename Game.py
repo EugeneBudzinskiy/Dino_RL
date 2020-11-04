@@ -1,8 +1,8 @@
-from Hero import Human, Hero
-from Env import Environment
-from config import *
-from Graphics import Graphics
 from CollisionLogic import CollisionLogic
+from Env import Environment
+from Graphics import Graphics
+from Hero import Human, Hero
+from config import *
 from prop import Cactus, Bird
 
 

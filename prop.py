@@ -1,7 +1,8 @@
 from abc import ABC
-from PhysxObj import PhysicalObject
 from random import randint
+
 from Interfaces import IProp
+from PhysxObj import PhysicalObject
 from config import BIRD_SPAWN_HEIGHT, BIRD_IMAGE, CACTUS_IMAGE, CACTUS_SIZE
 from image import Image
 

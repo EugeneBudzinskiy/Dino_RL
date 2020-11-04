@@ -1,8 +1,9 @@
-from prop import Prop
+import pygame as pg
+
 from Hero import Hero
 from config import HEIGHT, BACKGROUND_IMAGE, WIDTH, WASTED_IMAGE
-import pygame as pg
 from image import Image
+from prop import Prop
 
 
 class Graphics:
