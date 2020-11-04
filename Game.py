@@ -1,7 +1,7 @@
 from CollisionLogic import CollisionLogic
 from Env import Environment
 from Graphics import Graphics
-from Hero import Human, Hero,Agent
+from Hero import Human, Hero, Agent
 from config import *
 from prop import Cactus, Bird
 
@@ -9,27 +9,28 @@ from prop import Cactus, Bird
 class GameEngine:
     def __init__(self, mode):
         self.is_running = False
-        self.human_player = True
 
         self.animation_counter = 0
         self.waiter_counter = 0
         self.score = 0
 
-        # self.human = None
-        # self.agent = None
         self.clock = None
         self.width = WIDTH
         self.height = HEIGHT
 
         if mode == HUMAN:
             self.hero = Human()
+            self.is_human = True
         else:
-            self.hero = None  # TODO replace Hero to Agent
+            self.hero = Agent()
+            self.is_human = False
 
-        self.environment = Environment()
         self.visible_obj = []
         self.screen = pg.display.set_mode((self.width, self.height))
+
+        self.environment = Environment()
         self.graphics = Graphics(self.screen)
+
         pg.init()
 
     def create_level(self):
@@ -67,12 +68,13 @@ class GameEngine:
         self.update()
 
     def key_checker(self):
-        pressed = pg.key.get_pressed()
-        key_arr = [pg.K_UP, pg.K_SPACE, pg.K_DOWN, pg.K_LCTRL]
-        self.hero.change_state(pressed, key_arr)
+        if isinstance(self.hero, Human):
+            pressed = pg.key.get_pressed()
+            key_arr = [pg.K_UP, pg.K_SPACE, pg.K_DOWN, pg.K_LCTRL]
+            self.hero.change_state(pressed, key_arr)
 
     def collision_stuff(self):
-        col_log = CollisionLogic
+        col_log = CollisionLogic()
 
         cur_prop = self.environment.prop_list[0]
 
@@ -93,14 +95,14 @@ class GameEngine:
             self.graphics.draw_text("Score:{}".format(self.score), (980, 50), (255, 255, 255))
 
             if self.is_running:
-
-                self.key_checker()
+                if self.is_human:
+                    self.key_checker()
                 self.hero.update()
 
                 if self.animation_counter % 10 == 0:
                     self.score += 1
-                self.environment.update()
 
+                self.environment.update()
                 self.animation_counter += 1
             else:
                 self.waiter_counter += 1
@@ -110,7 +112,9 @@ class GameEngine:
                     break
 
             self.draw_visible_obj()
+
             if self.animation_counter == FPS:
                 self.animation_counter = 0
+
             pg.display.update()
             self.clock.tick(FPS)

@@ -9,11 +9,11 @@ class Hero(PhysicalObject, ABC):
     texture_pack = []
     t = []
     for image in DINO_SIT_IMAGE:
-        t.append(Image(image, (0,0)))
+        t.append(Image(image, (0, 0)))
     texture_pack.append(t)
     t = []
     for image in DINO_IMAGE:
-        t.append(Image(image, (0,0)))
+        t.append(Image(image, (0, 0)))
     texture_pack.append(t)
 
     def __init__(self):
