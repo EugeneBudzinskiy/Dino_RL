@@ -5,6 +5,16 @@ from image import Image
 
 
 class Hero(PhysicalObject, ABC):
+    texture_pack = []
+    t = []
+    for image in DINO_SIT_IMAGE:
+        t.append(Image(image, (0,0)))
+    texture_pack.append(t)
+    t = []
+    for image in DINO_IMAGE:
+        t.append(Image(image, (0,0)))
+    texture_pack.append(t)
+
     def __init__(self):
         super().__init__()
         self._gravity_acc = -1
@@ -39,11 +49,11 @@ class Hero(PhysicalObject, ABC):
     def change_textures(self):
         self.texture = []
         if self._state == 'sit':
-            for image in DINO_SIT_IMAGE:
-                self.texture.append(Image(image, self.coord))
+            self.texture = self.texture_pack[0]
         else:
-            for image in DINO_IMAGE:
-                self.texture.append(Image(image, self.coord))
+            self.texture = self.texture_pack[1]
+        for image in self.texture:
+            image.change_location(self.coord)
 
     def update_state(self):
         if self._admire_state == 'nothing':

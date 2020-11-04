@@ -33,10 +33,11 @@ class Environment:
         for prop in self.__prop_list:
             if prop.coord[0] < - GLOBAL_OFFSET * 2:
                 self.__prop_list.remove(prop)
+                self.spawn_prop(self.__prop_list[len(self.__prop_list) - 1])
 
     def update(self):
         for prop in self.__prop_list:
             prop.update()
         self.remove_prop()
-        if len(self.__prop_list) < NUMBER_OF_EXISTING_PROP:
-            self.spawn_prop(self.__prop_list[len(self.__prop_list) - 1])
+
+

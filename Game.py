@@ -3,7 +3,6 @@ from Hero import Human, Hero
 from Env import Environment
 from config import *
 from Graphics import Graphics
-from image import Image
 from CollisionLogic import CollisionLogic
 from prop import Cactus, Bird
 
@@ -24,7 +23,7 @@ class GameEngine:
         self.height = HEIGHT
 
         if self.human_player:
-            self.hero = Human()  # TODO replace Hero to Human
+            self.hero = Human()
         else:
             self.hero = None  # TODO replace Hero to Agent
 
@@ -32,7 +31,7 @@ class GameEngine:
         self.visible_obj = []
         self.screen = pg.display.set_mode((self.width, self.height))
         self.graphics = Graphics(self.screen)
-
+        self.difficult_multiply = 1
         pg.init()
 
     def create_level(self):
@@ -52,8 +51,12 @@ class GameEngine:
             if isinstance(obj, Hero):
                 self.graphics.draw_obj(obj, (self.animation_counter // 5) % 6)
             elif isinstance(obj, Cactus):
+                if not obj.is_visible:
+                    obj.make_visible()
                 self.graphics.draw_obj(obj, 0)
             elif isinstance(obj, Bird):
+                if not obj.is_visible:
+                    obj.make_visible()
                 self.graphics.draw_obj(obj, (self.animation_counter // 12) % 2)
 
     def setup(self):
@@ -74,6 +77,17 @@ class GameEngine:
         cur_prop = self.environment.prop_list[0]
 
         return col_log.check_collision(self.hero, cur_prop)
+
+    def change_difficult_mode(self):
+        if self.difficult_multiply <= 3:
+            if self.score == 50:
+                self.difficult_multiply += 0.5
+            elif self.score == 200:
+                self.difficult_multiply += 0.5
+            elif self.score == 500:
+                self.difficult_multiply += 0.5
+            elif self.score == 1000:
+                self.difficult_multiply += 0.5
 
     def update(self):
         while self.is_running or self.waiter_counter <= FPS * 4:
@@ -99,11 +113,12 @@ class GameEngine:
             else:
                 self.waiter_counter += 1
                 self.graphics.draw_wasted_screen()
+                self.difficult_multiply = 1
                 if pg.key.get_pressed()[pg.K_SPACE]:
                     break
-
+            self.change_difficult_mode()
             self.draw_visible_obj()
             if self.animation_counter == FPS:
                 self.animation_counter = 0
             pg.display.flip()
-            self.clock.tick(FPS)
+            self.clock.tick(FPS*self.difficult_multiply)

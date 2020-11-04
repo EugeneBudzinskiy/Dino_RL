@@ -12,6 +12,7 @@ class Prop(PhysicalObject, IProp, ABC):
         self._prop_vel = 5
         self._spawn_height = 0
 
+        self.is_visible = False
         self.is_spawned = False
         self.texture = None
 
@@ -47,17 +48,26 @@ class Bird(Prop):
     def __init__(self, width: int, height: int):
         super().__init__(height, width)
         self.texture = []
+
+        self.spawn_height = BIRD_SPAWN_HEIGHT[randint(0, len(BIRD_SPAWN_HEIGHT)-1)]
+
+    def make_visible(self):
         for image in BIRD_IMAGE:
             self.texture.append(Image(image, self.coord))
-        self.spawn_height = BIRD_SPAWN_HEIGHT[randint(0, len(BIRD_SPAWN_HEIGHT)-1)]
+        self.is_visible = True
 
 
 class Cactus(Prop):
     def __init__(self, width: int, height: int):
         super().__init__(height, width)
         self.texture = []
-        if width == CACTUS_SIZE[0][0]:
-            self.texture.append(Image(CACTUS_IMAGE[0], self.coord))
-        elif width == CACTUS_SIZE[1][0]:
-            self.texture.append(Image(CACTUS_IMAGE[1], self.coord))
+
         self.spawn_height = 0
+
+    def make_visible(self):
+        self.texture = []
+        if self.size[0] == CACTUS_SIZE[0][0]:
+            self.texture = [Image(CACTUS_IMAGE[0], self.coord)]
+        elif self.size[0] == CACTUS_SIZE[1][0]:
+            self.texture = [Image(CACTUS_IMAGE[1], self.coord)]
+        self.is_visible = True

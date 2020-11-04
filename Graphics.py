@@ -43,4 +43,4 @@ class Graphics:
         wasted = Image(WASTED_IMAGE, [0, 0])
         self.screen.blit(s, (0, 0))
         self.screen.blit(wasted.image, wasted.rect)
-        self.draw_text("Press SPACE to continue.",(500, 650),(186, 186, 186))
+        self.draw_text("Press SPACE to continue.", (500, 650), (186, 186, 186))
