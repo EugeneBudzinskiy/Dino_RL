@@ -38,7 +38,7 @@ class Hero(PhysicalObject, ABC):
 
     def change_textures(self):
         self.texture = []
-        if self._state == 'squish':
+        if self._state == 'sit':
             for image in DINO_SIT_IMAGE:
                 self.texture.append(Image(image, self.coord))
         else:
@@ -48,13 +48,13 @@ class Hero(PhysicalObject, ABC):
     def update_state(self):
         if self._admire_state == 'nothing':
             if self.coord[1] >= 0:
-                if self._state == 'squish':
+                if self._state == 'sit':
                     self._un_squish()
                 self._state = 'nothing'
                 self._fall()
 
         elif self._admire_state == 'jump':
-            if self._state == 'nothing' or self._state == 'squish':
+            if self._state == 'nothing' or self._state == 'sit':
                 self._un_squish()
                 self._jump()
                 self._fall()
@@ -68,7 +68,7 @@ class Hero(PhysicalObject, ABC):
                 self._state = 'quick-fall'
             elif self._state == 'nothing' or self._state == 'quick-fall' and self.coord[1] >= 0:
                 self._squish()
-                self._state = 'squish'
+                self._state = 'sit'
         self.change_textures()
 
 
