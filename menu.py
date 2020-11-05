@@ -1,11 +1,10 @@
 import pygame_menu
 from config import HUMAN, AGENT
-from Game import GameEngine
 
 
 class GameMenu:
-    def __init__(self):
-        self.game = GameEngine(HUMAN)
+    def __init__(self, game):
+        self.game = game
         self.menu = pygame_menu.Menu(300, 400, 'Dino with RL', theme=pygame_menu.themes.THEME_DARK)
 
     def start_the_game(self):

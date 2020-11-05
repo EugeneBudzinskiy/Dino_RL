@@ -4,6 +4,8 @@ from Graphics import Graphics
 from Hero import Human, Hero, Agent
 from config import *
 from prop import Cactus, Bird
+import pygame_menu as pgm
+from menu import GameMenu
 
 
 class GameEngine:
@@ -37,6 +39,21 @@ class GameEngine:
         self.environment.spawn_prop(FIRST_SPAWN_DISTANCE)
         for props in range(0, NUMBER_OF_EXISTING_PROP):
             self.environment.spawn_prop()
+
+    def continue_game(self):
+        self.update()
+
+    @staticmethod
+    def back_to_main_menu():
+        menu = GameMenu(GameEngine(HUMAN))
+        menu.start_menu()
+
+    def pause_menu(self):
+        menu = pgm.Menu(300, 400, 'Pause', theme=pgm.themes.THEME_DARK)
+        menu.add_button('Continue', self.continue_game)
+        menu.add_button('Back to main menu', self.back_to_main_menu)
+        menu.add_button('Exit', pgm.events.EXIT)
+        menu.mainloop(self.screen)
 
     def draw_visible_obj(self):
         self.visible_obj = []
@@ -93,6 +110,8 @@ class GameEngine:
                 self.is_running = False
 
             self.graphics.draw_text("Score:{}".format(self.score), (980, 50), (255, 255, 255))
+            if pg.key.get_pressed()[pg.K_ESCAPE]:
+                self.pause_menu()
 
             if self.is_running:
                 if self.is_human:
@@ -109,7 +128,7 @@ class GameEngine:
                 self.graphics.draw_wasted_screen()
 
                 if pg.key.get_pressed()[pg.K_SPACE]:
-                    break
+                    self.back_to_main_menu()
 
             self.draw_visible_obj()
 
