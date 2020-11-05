@@ -5,6 +5,7 @@ from config import HUMAN, AGENT
 class GameMenu:
     def __init__(self, game):
         self.game = game
+        pygame_menu.themes.THEME_DARK.widget_font = pygame_menu.font.FONT_8BIT
         self.menu = pygame_menu.Menu(300, 400, 'Dino with RL', theme=pygame_menu.themes.THEME_DARK)
 
     def start_the_game(self):
@@ -17,6 +18,7 @@ class GameMenu:
         pass
 
     def start_menu(self):
+
         self.menu.add_button('Play', self.start_the_game)
         self.menu.add_button('AI', self.start_the_ai)
         self.menu.add_button('Remember', self.remember)
