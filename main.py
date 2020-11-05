@@ -4,7 +4,7 @@ from config import HUMAN
 
 
 def main():
-    menu = GameMenu(GameEngine(HUMAN))
+    menu = GameMenu(GameEngine())
     menu.start_menu()
 
 

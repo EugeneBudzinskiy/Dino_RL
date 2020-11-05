@@ -9,7 +9,7 @@ from menu import GameMenu
 
 
 class GameEngine:
-    def __init__(self, mode):
+    def __init__(self):
         self.is_running = False
 
         self.animation_counter = 0
@@ -19,18 +19,13 @@ class GameEngine:
         self.clock = None
         self.width = WIDTH
         self.height = HEIGHT
-
-        if mode == HUMAN:
-            self.hero = Human()
-            self.is_human = True
-        else:
-            self.hero = Agent()
-            self.is_human = False
+        self.hero = None
+        self.is_human = None
 
         self.visible_obj = []
         self.screen = pg.display.set_mode((self.width, self.height))
 
-        self.environment = Environment()
+        self.environment = None
         self.graphics = Graphics(self.screen)
 
         pg.init()
@@ -45,7 +40,7 @@ class GameEngine:
 
     @staticmethod
     def back_to_main_menu():
-        menu = GameMenu(GameEngine(HUMAN))
+        menu = GameMenu(GameEngine())
         menu.start_menu()
 
     def pause_menu(self):
@@ -77,11 +72,20 @@ class GameEngine:
                     obj.make_visible()
                 self.graphics.draw_obj(obj, (self.animation_counter // 12) % 2)
 
-    def setup(self):
+    def setup(self, mode):
+        self.is_running = True
+        self.waiter_counter = 0
+        self.animation_counter = 0
+        self.environment = Environment()
+        if mode == HUMAN:
+            self.hero = Human()
+            self.is_human = True
+        else:
+            self.hero = Agent()
+            self.is_human = False
         self.create_level()
         self.clock = pg.time.Clock()
 
-        self.is_running = True
         self.update()
 
     def key_checker(self):
