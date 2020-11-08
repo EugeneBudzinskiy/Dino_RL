@@ -1,16 +1,18 @@
+import pygame_menu as pgm
+
 from CollisionLogic import CollisionLogic
 from Env import Environment
 from Graphics import Graphics
 from Hero import Human, Hero, Agent
 from config import *
-from prop import Cactus, Bird
-import pygame_menu as pgm
 from menu import GameMenu
+from prop import Cactus, Bird
+from CustomException import SaveNNException
 
 
 class GameEngine:
     def __init__(self):
-        self.__is_running  = False
+        self.__is_running = False
 
         self.__animation_counter = 0
         self.__waiter_counter = 0
@@ -38,15 +40,14 @@ class GameEngine:
     def __continue_game(self):
         self.__update()
 
-    @staticmethod
-    def __back_to_main_menu():
+    def __back_to_main_menu(self):
         menu = GameMenu(GameEngine())
-        menu.start_menu()
+        menu.start_menu(not self.__is_human)
 
     def __pause_menu(self):
         menu = pgm.Menu(300, 400, 'Pause', theme=pgm.themes.THEME_DARK)
         menu.add_button('Continue', self.__continue_game)
-        menu.add_button('Back to main menu', self.__back_to_main_menu)
+        menu.add_button('End Game', self.__back_to_main_menu)
         menu.add_button('Exit', pgm.events.EXIT)
         menu.mainloop(self.screen)
 
@@ -72,21 +73,27 @@ class GameEngine:
                     obj.make_visible()
                 self.__graphics.draw_obj(obj, (self.__animation_counter // 12) % 2)
 
-    def setup(self, mode):
+    def setup(self):
         self.__is_running = True
         self.__waiter_counter = 0
         self.__animation_counter = 0
+
         self.__environment = Environment()
-        if mode == HUMAN:
-            self.__hero = Human()
-            self.__is_human = True
-        else:
-            self.__hero = Agent()
-            self.__is_human = False
         self.__create_level()
         self.__clock = pg.time.Clock()
 
         self.__update()
+
+    def save_process(self):
+        # TODO Add save process
+        try:
+            self.__hero.save_weights()
+        except SaveNNException:
+            print('U try save stupid NN. Think once more')
+
+    def set_hero(self, mode):
+        self.__is_human = not mode
+        self.__hero = Human() if mode == HUMAN else Agent()
 
     def __key_checker(self):
         if isinstance(self.__hero, Human):
@@ -113,19 +120,20 @@ class GameEngine:
             if self.__collision_stuff():
                 self.__is_running = False
 
-            self.__graphics.draw_text("__score:{}".format(self.__score), (980, 50), (255, 255, 255))
+            self.__graphics.draw_text("score:{}".format(self.__score), (980, 50), (255, 255, 255))
             if pg.key.get_pressed()[pg.K_ESCAPE]:
                 self.__pause_menu()
 
-            if self.__is_running :
+            if self.__is_running:
                 if self.__is_human:
                     self.__key_checker()
-                self.__hero.__update()
+
+                self.__hero.update()
 
                 if self.__animation_counter % 10 == 0:
                     self.__score += 1
 
-                self.__environment.__update()
+                self.__environment.update()
                 self.__animation_counter += 1
             else:
                 self.__waiter_counter += 1

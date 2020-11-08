@@ -1,5 +1,5 @@
-from menu import GameMenu
 from Game import GameEngine
+from menu import GameMenu
 
 
 def main():

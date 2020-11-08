@@ -1,5 +1,6 @@
 from abc import ABC
 
+from NN import Brain, Memory
 from PhysxObj import PhysicalObject
 from config import HERO_SIZE, DINO_SIT_IMAGE, DINO_IMAGE, HERO_SIT_SIZE
 from image import Image
@@ -104,4 +105,18 @@ class Agent(Hero):
     def __init__(self):
         super().__init__()
 
-        self.brain = None
+        self.__brain = Brain()
+        self.__memory = Memory()
+
+    def set_memory(self, mem_data):
+        self.__memory = mem_data
+
+    def get_memory(self):
+        pass
+
+    def save_weights(self):
+        raw_weights = self.__brain.get_weights()
+        return raw_weights
+
+    def __get_guess(self):
+        pass
