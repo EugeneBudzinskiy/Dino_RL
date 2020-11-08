@@ -88,8 +88,8 @@ class GameEngine:
         # TODO Add save process
         try:
             self.__hero.save_weights()
-        except SaveNNException:
-            print('U try save stupid NN. Think once more')
+        except SaveNNException as e:
+            print(f'Error: {e.message}')
 
     def set_hero(self, mode):
         self.__is_human = not mode
