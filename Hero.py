@@ -105,6 +105,8 @@ class Agent(Hero):
     def __init__(self):
         super().__init__()
 
+        self.file_path = 'weights.json'
+
         self.__brain = Brain()
         self.__memory = Memory()
 
@@ -117,6 +119,9 @@ class Agent(Hero):
     def save_weights(self):
         raw_weights = self.__brain.get_weights()
         return raw_weights
+
+    def load_weights(self, json_weights):
+        self.__brain.set_weights(json_weights)
 
     def __get_guess(self):
         pass

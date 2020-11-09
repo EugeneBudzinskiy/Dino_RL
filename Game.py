@@ -7,7 +7,8 @@ from Hero import Human, Hero, Agent
 from config import *
 from menu import GameMenu
 from prop import Cactus, Bird
-from CustomException import SaveNNException
+from CustomException import SaveNNException, LoadNNException
+from Saver import Saver
 
 
 class GameEngine:
@@ -85,11 +86,20 @@ class GameEngine:
         self.__update()
 
     def save_process(self):
-        # TODO Add save process
         try:
-            self.__hero.save_weights()
+            weights = self.__hero.save_weights()
+            saver = Saver(self.__hero.file_path)
+            saver.save(weights)
         except SaveNNException as e:
-            print(f'Error: {e.message}')
+            print(f'!!! Error: {e.message}')
+
+    def load_process(self):
+        try:
+            saver = Saver(self.__hero.file_path)
+            json_weights = saver.load()
+            self.__hero.load_weights(json_weights)
+        except LoadNNException as e:
+            print(f'!!! Error: {e}')
 
     def set_hero(self, mode):
         self.__is_human = not mode
@@ -109,7 +119,7 @@ class GameEngine:
         return col_log.check_collision(self.__hero, cur_prop)
 
     def __update(self):
-        while self.__is_running  or self.__waiter_counter <= FPS * 4:
+        while self.__is_running or self.__waiter_counter <= FPS * 4:
             self.__graphics.draw_background(self.__animation_counter, isinstance(self.__hero, Human))
 
             for event in pg.event.get():
