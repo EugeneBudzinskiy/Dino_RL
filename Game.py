@@ -112,27 +112,31 @@ class GameEngine:
             self.__hero.change_state(pressed, key_arr)
 
     def __collision_stuff(self):
-        col_log = CollisionLogic()
+        collision_logic = CollisionLogic()
+        current_prop = self.__environment.prop_list[0]
 
-        cur_prop = self.__environment.prop_list[0]
-
-        return col_log.check_collision(self.__hero, cur_prop)
+        if collision_logic.check_collision(self.__hero, current_prop):
+            self.__is_running = False
 
     def __update(self):
         while self.__is_running or self.__waiter_counter <= FPS * 4:
+            self.__clock.tick(FPS)
+
             self.__graphics.draw_background(self.__animation_counter, isinstance(self.__hero, Human))
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.__is_running = False
                     self.__waiter_counter = FPS * 4
+                elif event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE:
+                        self.__pause_menu()
+                    elif event.key == pg.K_SPACE and not self.__is_running:
+                        self.__back_to_main_menu()
 
-            if self.__collision_stuff():
-                self.__is_running = False
+            self.__collision_stuff()
 
             self.__graphics.draw_text("score:{}".format(self.__score), (980, 50), (255, 255, 255))
-            if pg.key.get_pressed()[pg.K_ESCAPE]:
-                self.__pause_menu()
 
             if self.__is_running:
                 if self.__is_human:
@@ -149,13 +153,6 @@ class GameEngine:
                 self.__waiter_counter += 1
                 self.__graphics.draw_wasted_screen()
 
-                if pg.key.get_pressed()[pg.K_SPACE]:
-                    self.__back_to_main_menu()
-
             self.__draw_visible_obj()
-
-            if self.__animation_counter == FPS:
-                self.__animation_counter = 0
-
+            self.__animation_counter %= FPS
             pg.display.update()
-            self.__clock.tick(FPS)
