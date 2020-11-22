@@ -29,9 +29,10 @@ class Graphics:
 
     def draw_background(self, anim_counter, is_hero):
         self.screen.fill((0, 0, 0))
-        if is_hero:
-            self.screen.blit(self.bg_image[(anim_counter // 5) % 12].image,
-                             self.bg_image[(anim_counter // 5) % 12].rect)
+        # TODO Remove comment on block render background !!!
+        # if is_hero:
+        #     self.screen.blit(self.bg_image[(anim_counter // 5) % 12].image,
+        #                      self.bg_image[(anim_counter // 5) % 12].rect)
 
     def draw_obj_without_image(self, obj):
         if isinstance(obj, Prop) or isinstance(obj, Hero):

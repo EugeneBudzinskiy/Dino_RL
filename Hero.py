@@ -1,6 +1,5 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
-from NN import Brain, Memory
 from PhysxObj import PhysicalObject
 from config import HERO_SIZE, DINO_SIT_IMAGE, DINO_IMAGE, HERO_SIT_SIZE
 from image import Image
@@ -83,21 +82,17 @@ class Hero(PhysicalObject, ABC):
                 self._state = 'sit'
         self.change_textures()
 
+    @abstractmethod
+    def change_state(self, admire_state):
+        pass
+
 
 class Human(Hero):
     def __init__(self):
         super().__init__()
 
-    def change_state(self, pressed_button, key_list: list):
-        if pressed_button[key_list[0]] or pressed_button[key_list[1]]:
-            self._admire_state = 'jump'
-
-        elif pressed_button[key_list[2]] or pressed_button[key_list[3]]:
-            self._admire_state = 'sit'
-
-        else:
-            self._admire_state = 'nothing'
-
+    def change_state(self, admire_state):
+        self._admire_state = admire_state
         self.update_state()
 
 
@@ -105,23 +100,6 @@ class Agent(Hero):
     def __init__(self):
         super().__init__()
 
-        self.file_path = 'weights.json'
-
-        self.__brain = Brain()
-        self.__memory = Memory()
-
-    def set_memory(self, mem_data):
-        self.__memory = mem_data
-
-    def get_memory(self):
-        pass
-
-    def save_weights(self):
-        raw_weights = self.__brain.get_weights()
-        return raw_weights
-
-    def load_weights(self, json_weights):
-        self.__brain.set_weights(json_weights)
-
-    def __get_guess(self):
-        pass
+    def change_state(self, admire_state):
+        self._admire_state = admire_state
+        self.update_state()

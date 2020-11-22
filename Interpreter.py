@@ -1,17 +1,19 @@
-from Hero import Agent
+from collections import deque
+
+from config import EPISODE_COUNT
 
 
 class Interpreter:
     def __init__(self):
-        self.states = list()
-        self.actions = list()
-        self.state_encode = {'nothing': 0, 'jump': 1, 'sit': 2}
+        self.state_size = 4
+        self.action_size = 3
 
-    def collect_data_for_nn(self, agent: Agent):
-        if isinstance(agent, Agent):
-            cur_state = agent.get_state()
-            self.states.append(self.state_encode[cur_state])
+        self.reward_window = deque(maxlen=100)
+        self.running_reward = 0
+        self.frame_count = 0
 
-    def get_states(self):
-        return self.states
+    def train_cycle(self):
+        for i_episode in range(1, EPISODE_COUNT + 1):
+            pass
+
 

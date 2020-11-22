@@ -36,3 +36,26 @@ for i in range(1, 7):
 CACTUS_IMAGE = [pg.image.load(os.path.join("texture", 'Cactus1.png')), pg.image.load(os.path.join("texture", 'Cactus2.png'))]
 BIRD_IMAGE = [pg.image.load(os.path.join("texture", 'Bird-1.png')), pg.image.load(os.path.join("texture", 'Bird-2.png'))]
 WASTED_IMAGE = pg.image.load(os.path.join("texture", "wasted-1.png"))
+
+
+# Neural Network Part
+
+EPISODE_COUNT = 10000
+MAX_STEPS_PER_EPISODE = 300
+
+BUFFER_SIZE = int(1e6)
+BATCH_SIZE = 32
+
+UPDATE_AFTER_FRAME = 2
+SYNC_AFTER_FRAME = 1000
+
+LEARNING_RATE = 0.00025
+GAMMA = 0.99
+
+EPSILON = 1.0
+EPSILON_MIN = 0.1
+EPSILON_MAX = 1.0
+EPSILON_INTERVAL = EPSILON_MAX - EPSILON_MIN
+
+EPSILON_GREEDY_FRAMES = 1000
+EPSILON_RANDOM_FRAMES = 500

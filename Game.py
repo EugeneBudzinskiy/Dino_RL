@@ -1,4 +1,5 @@
 import pygame_menu as pgm
+import numpy as np
 
 from CollisionLogic import CollisionLogic
 from Env import Environment
@@ -7,8 +8,6 @@ from Hero import Human, Hero, Agent
 from config import *
 from menu import GameMenu
 from prop import Cactus, Bird
-from CustomException import SaveNNException, LoadNNException
-from Saver import Saver
 
 
 class GameEngine:
@@ -19,10 +18,12 @@ class GameEngine:
         self.__animation_counter = 0
         self.__waiter_counter = 0
         self.__score = 0
+        self.__action_queue = []
 
-        self.__clock = None
         self.__width = WIDTH
         self.__height = HEIGHT
+
+        self.__clock = None
         self.__hero = None
         self.__is_human = None
 
@@ -86,31 +87,10 @@ class GameEngine:
 
         self.__update()
 
-    def save_process(self):
-        try:
-            weights = self.__hero.save_weights()
-            saver = Saver(self.__hero.file_path)
-            saver.save(weights)
-        except SaveNNException as e:
-            print(f'!!! Error: {e.message}')
-
-    def load_process(self):
-        try:
-            saver = Saver(self.__hero.file_path)
-            json_weights = saver.load()
-            self.__hero.load_weights(json_weights)
-        except LoadNNException as e:
-            print(f'!!! Error: {e}')
-
     def set_hero(self, mode):
         self.__is_alive = True
         self.__is_human = not mode
         self.__hero = Human() if mode == HUMAN else Agent()
-
-    def __key_checker(self):
-        pressed = pg.key.get_pressed()
-        key_arr = [pg.K_UP, pg.K_SPACE, pg.K_DOWN, pg.K_LCTRL]
-        self.__hero.change_state(pressed, key_arr)
 
     def __collision_stuff(self):
         collision_logic = CollisionLogic()
@@ -130,6 +110,38 @@ class GameEngine:
             self.__waiter_counter = 0
             self.__back_to_main_menu()
 
+    def __key_checker(self, event):
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_SPACE:
+                if not self.__is_alive:
+                    self.__back_to_main_menu()
+
+                elif 'jump' not in self.__action_queue:
+                    self.__action_queue.append('jump')
+
+            elif event.key == pg.K_LCTRL:
+                if 'sit' not in self.__action_queue:
+                    self.__action_queue.append('sit')
+
+            elif event.key == pg.K_ESCAPE:
+                self.__pause_menu()
+
+        elif event.type == pg.KEYUP:
+            if event.key == pg.K_SPACE:
+                if 'jump' in self.__action_queue:
+                    self.__action_queue.remove('jump')
+
+            elif event.key == pg.K_LCTRL:
+                if 'sit' in self.__action_queue:
+                    self.__action_queue.remove('sit')
+
+    def __get_admire_state(self):
+        print(self.__action_queue)
+        if len(self.__action_queue) == 0:
+            return 'nothing'
+        else:
+            return self.__action_queue[0]
+
     def __update(self):
         while self.__is_running:
             self.__clock.tick(FPS)
@@ -138,22 +150,23 @@ class GameEngine:
                 if event.type == pg.QUIT:
                     self.__is_running = False
 
-                elif event.type == pg.KEYDOWN:
-                    if event.key == pg.K_ESCAPE:
-                        self.__pause_menu()
-
-                    elif event.key == pg.K_SPACE and not self.__is_alive:
-                        self.__back_to_main_menu()
+                elif event.type == pg.KEYDOWN or event.type == pg.KEYUP:
+                    self.__key_checker(event)
 
             if self.__is_alive:
                 if self.__is_human:
-                    self.__key_checker()
+                    admire_state = self.__get_admire_state()
+                else:
+                    state_list = ['nothing', 'jump', 'sit']
+                    random_index = np.random.randint(len(state_list))
+                    admire_state = state_list[random_index]
 
                 self.__collision_stuff()
-                self.__animation_counter_stuff()
-
+                self.__hero.change_state(admire_state)
                 self.__hero.update()
+
                 self.__environment.update()
+                self.__animation_counter_stuff()
 
                 self.__graphics.draw_background(self.__animation_counter, isinstance(self.__hero, Human))
                 self.__graphics.draw_text("score:{}".format(self.__score), (980, 50), (255, 255, 255))
@@ -163,4 +176,4 @@ class GameEngine:
                 self.__graphics.draw_wasted_screen()
                 self.__waiter_counter_stuff()
 
-            pg.display.update()
+            # pg.display.update()
