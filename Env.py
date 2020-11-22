@@ -44,7 +44,3 @@ class Environment:
         for prop in self.__prop_list:
             prop.update()
             self.__remove_prop(prop)
-
-
-
-

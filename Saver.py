@@ -1,3 +1,3 @@
 class Saver:
-    def __init__(self, file_path):
+    def __init__(self):
         pass

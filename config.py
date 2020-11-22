@@ -33,8 +33,10 @@ for i in range(1, 7):
     DINO_SIT_IMAGE.append(pg.image.load(os.path.join("texture", 'DinoSit-{}.png'.format(i))))
     DINO_IMAGE.append(pg.image.load(os.path.join("texture", 'Dino-{}.png'.format(i))))
 
-CACTUS_IMAGE = [pg.image.load(os.path.join("texture", 'Cactus1.png')), pg.image.load(os.path.join("texture", 'Cactus2.png'))]
-BIRD_IMAGE = [pg.image.load(os.path.join("texture", 'Bird-1.png')), pg.image.load(os.path.join("texture", 'Bird-2.png'))]
+CACTUS_IMAGE = [pg.image.load(os.path.join("texture", 'Cactus1.png')),
+                pg.image.load(os.path.join("texture", 'Cactus2.png'))]
+BIRD_IMAGE = [pg.image.load(os.path.join("texture", 'Bird-1.png')),
+              pg.image.load(os.path.join("texture", 'Bird-2.png'))]
 WASTED_IMAGE = pg.image.load(os.path.join("texture", "wasted-1.png"))
 
 
