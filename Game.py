@@ -35,6 +35,7 @@ class GameEngine:
         self.is_alive = True
 
         self.__action_queue = []
+        self.__score = 0
 
         self.__hero = Hero()
         self.__environment = Environment()
@@ -100,7 +101,28 @@ class GameEngine:
         pg.display.update()
 
     def step(self, action):
+        self.__score += 1
         self.__hero.change_state(action)
         self.__hero.update()
         self.__collision_check()
         self.__environment.update()
+
+    def get_state(self):
+        hero_y = self.__hero.coord[1]
+        hero_acc_y = self.__hero.acc[1]
+        prop_x, prop_y = self.__environment.prop_list[0].coord
+
+        hero_y /= self.__height
+        hero_acc_y /= self.__hero.get_max_acc()
+        prop_x /= self.__width
+        prop_y /= self.__height
+
+        result = [hero_y, hero_acc_y, prop_x, prop_y]
+        return result
+
+    def get_all_info(self):
+        next_state = self.get_state()
+        reward = self.__score
+        done = not self.is_alive
+
+        return next_state, reward, done

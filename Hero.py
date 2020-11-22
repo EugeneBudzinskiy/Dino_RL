@@ -20,6 +20,7 @@ class Hero(PhysicalObject, ABC):
         super().__init__()
         self._gravity_acc = -1
         self._jump_vel = 20
+        self.mul_grav = 5
 
         self.set_size(HERO_SIZE[0], HERO_SIZE[1])
         self.set_col_size(int(HERO_SIZE[0] * .75), int(HERO_SIZE[1] * .75))
@@ -34,6 +35,9 @@ class Hero(PhysicalObject, ABC):
         self.texture = []
         self.change_textures()
 
+    def get_max_acc(self):
+        return abs(self._gravity_acc * self.mul_grav)
+
     def _squish(self):
         self.set_size(HERO_SIT_SIZE[0], HERO_SIT_SIZE[1])
 
@@ -47,7 +51,7 @@ class Hero(PhysicalObject, ABC):
         self.set_acc(0, self._gravity_acc)
 
     def _quick_fall(self):
-        self.set_acc(0, self._gravity_acc * 5)
+        self.set_acc(0, self._gravity_acc * self.mul_grav)
 
     def get_state(self):
         return self._state
