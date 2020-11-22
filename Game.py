@@ -1,13 +1,9 @@
-import pygame_menu as pgm
-import numpy as np
-
 from CollisionLogic import CollisionLogic
 from Env import Environment
 from Graphics import Graphics
 from Hero import Hero
 from config import *
 from menu import GameMenu
-from prop import Cactus, Bird
 
 
 class GameEngine:
@@ -18,7 +14,6 @@ class GameEngine:
 
         self.__hero = Hero()
 
-        self.__waiter_counter = 0
         self.__score = 0
         self.__action_queue = []
 
@@ -39,7 +34,6 @@ class GameEngine:
         self.is_running = True
         self.is_alive = True
 
-        self.__waiter_counter = 0
         self.__action_queue = []
 
         self.__hero = Hero()
@@ -48,24 +42,16 @@ class GameEngine:
         self.__environment.create_level()
         self.__clock = pg.time.Clock()
 
-    # def __animation_counter_stuff(self):
-    #     self.__animation_counter = (self.__animation_counter + 1) % FPS
-    #     if self.__animation_counter % 10 == 0:
-    #         self.__score += 1
-    #
-    # def __waiter_counter_stuff(self):
-    #     self.__waiter_counter += 1
-    #     if self.__waiter_counter >= FPS * 4:
-    #         self.__waiter_counter = 0
-    #         self.__back_to_main_menu()
-    #
     def __key_checker(self, event):
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_ESCAPE:
                 self.menu.pause_menu()
 
             elif event.key == pg.K_SPACE:
-                if 'jump' not in self.__action_queue:
+                if not self.is_alive:
+                    self.menu.start_menu()
+
+                elif 'jump' not in self.__action_queue:
                     self.__action_queue.append('jump')
 
             elif event.key == pg.K_LCTRL:
@@ -103,8 +89,14 @@ class GameEngine:
             else:
                 self.__key_checker(event)
 
-        visible_obj = self.__environment.prop_list
-        self.__graphics.draw(self.__hero, visible_obj, self.__score)
+        if not self.is_alive:
+            finishing = self.__graphics.draw_wasted_screen()
+            if finishing:
+                self.menu.start_menu()
+        else:
+            visible_obj = self.__environment.prop_list
+            self.__graphics.draw(self.__hero, visible_obj, self.__score)
+
         pg.display.update()
 
     def step(self, action):

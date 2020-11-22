@@ -16,9 +16,6 @@ def process():
             action = engine.get_action_from_key_check()
             engine.step(action)
 
-            if not engine.is_alive:
-                break
-
     else:
         for i_episode in range(100):
             engine.setup()
