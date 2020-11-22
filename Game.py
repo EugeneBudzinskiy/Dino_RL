@@ -14,6 +14,7 @@ from Saver import Saver
 class GameEngine:
     def __init__(self):
         self.__is_running = False
+        self.__is_alive = False
 
         self.__animation_counter = 0
         self.__waiter_counter = 0
@@ -102,6 +103,7 @@ class GameEngine:
             print(f'!!! Error: {e}')
 
     def set_hero(self, mode):
+        self.__is_alive = True
         self.__is_human = not mode
         self.__hero = Human() if mode == HUMAN else Agent()
 
@@ -116,43 +118,48 @@ class GameEngine:
         current_prop = self.__environment.prop_list[0]
 
         if collision_logic.check_collision(self.__hero, current_prop):
-            self.__is_running = False
+            self.__is_alive = False
+
+    def __animation_counter_stuff(self):
+        self.__animation_counter = (self.__animation_counter + 1) % FPS
+        if self.__animation_counter % 10 == 0:
+            self.__score += 1
+
+    def __waiter_counter_stuff(self):
+        self.__waiter_counter += 1
+        if self.__waiter_counter >= FPS * 4:
+            self.__waiter_counter = 0
+            self.__back_to_main_menu()
 
     def __update(self):
-        while self.__is_running or self.__waiter_counter <= FPS * 4:
+        while self.__is_running:
             self.__clock.tick(FPS)
-
-            self.__graphics.draw_background(self.__animation_counter, isinstance(self.__hero, Human))
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.__is_running = False
-                    self.__waiter_counter = FPS * 4
                 elif event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
                         self.__pause_menu()
-                    elif event.key == pg.K_SPACE and not self.__is_running:
+                    elif event.key == pg.K_SPACE and not self.__is_alive:
                         self.__back_to_main_menu()
 
-            self.__collision_stuff()
-
-            self.__graphics.draw_text("score:{}".format(self.__score), (980, 50), (255, 255, 255))
-
-            if self.__is_running:
+            if self.__is_alive:
                 if self.__is_human:
                     self.__key_checker()
 
+                self.__collision_stuff()
+                self.__animation_counter_stuff()
+
                 self.__hero.update()
-
-                if self.__animation_counter % 10 == 0:
-                    self.__score += 1
-
                 self.__environment.update()
-                self.__animation_counter += 1
-            else:
-                self.__waiter_counter += 1
-                self.__graphics.draw_wasted_screen()
 
-            self.__draw_visible_obj()
-            self.__animation_counter %= FPS
+                self.__graphics.draw_background(self.__animation_counter, isinstance(self.__hero, Human))
+                self.__graphics.draw_text("score:{}".format(self.__score), (980, 50), (255, 255, 255))
+                self.__draw_visible_obj()
+
+            else:
+                self.__graphics.draw_wasted_screen()
+                self.__waiter_counter_stuff()
+
             pg.display.update()
