@@ -6,11 +6,20 @@ from config import GLOBAL_OFFSET, GROUND_LEVEL
 
 class PhysicalObject(IPhysicalObject, ABC):
     def __init__(self):
-        self._coord = (0, 0)  # X|Y
-        self._vel = (0, 0)    # X|Y
-        self._acc = (0, 0)    # X|Y
-        self._size = (0, 0)   # W|H
+        self._coord = (0, 0)      # X|Y
+        self._vel = (0, 0)        # X|Y
+        self._acc = (0, 0)        # X|Y
+        self._size = (0, 0)       # W|H
         self._col_size = (0, 0)   # W|H
+
+        self._current_frame = 0
+        self._animation_frame = 0
+        self._animation_frame_count = 1
+        self._animation_delay = 1
+
+    @property
+    def animation_frame(self):
+        return self._animation_frame
 
     @property
     def coord(self):
@@ -51,6 +60,10 @@ class PhysicalObject(IPhysicalObject, ABC):
         self._col_size = (col_width, col_height)
 
     def update(self):
+        self._current_frame = (self._current_frame + 1) % self._animation_delay
+        if self._current_frame == 0:
+            self._animation_frame = (self._animation_frame + 1) % self._animation_frame_count
+
         c_acc_x = self._acc[0]
         c_acc_y = self._acc[1]
 

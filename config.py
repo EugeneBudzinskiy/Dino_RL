@@ -2,8 +2,8 @@ import os
 
 import pygame as pg
 
-WIDTH = 1280
-HEIGHT = 720
+WIDTH = 800
+HEIGHT = 400
 FPS = 60
 
 HUMAN = 0

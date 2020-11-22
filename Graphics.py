@@ -9,30 +9,30 @@ from prop import Prop
 class Graphics:
     def __init__(self, screen):
         self.screen = screen
-        self.bg_image = []
-        for image in BACKGROUND_IMAGE:
-            self.bg_image.append(Image(image, [0, 0]))
 
-    def draw_obj(self, obj, i):
-        if isinstance(obj, Prop) or isinstance(obj, Hero):
-            if self.screen:
-                try:
-                    cur_coord = obj.get_coord_normalized(HEIGHT - obj.size[1])
-                    obj.texture[i].change_location([cur_coord[0], cur_coord[1]])
-                    self.screen.blit(obj.texture[i].image, obj.texture[i].rect)
-                except pg.error:
-                    exit(500)
-            else:
-                raise Exception('Screen is not initialize.')
+        self.color_white = (255, 255, 255)
+
+    def draw(self, hero, visible_objects: list, score: int):
+        self.draw_background()
+        self.draw_scores(score)
+        self.draw_obj(hero)
+        self.draw_obj(visible_objects)
+
+    def draw_obj(self, obj):
+        if isinstance(obj, list):
+            for el in obj:
+                self.draw_single_obj(el)
         else:
-            raise Exception('Function draw_obj can`t draw this obj.')
+            self.draw_single_obj(obj)
 
-    def draw_background(self, anim_counter, is_hero):
+    def draw_single_obj(self, obj):
+        a_f = obj.animation_frame
+        cur_coord = obj.get_coord_normalized(HEIGHT - obj.size[1])
+        obj.texture[a_f].change_location([cur_coord[0], cur_coord[1]])
+        self.screen.blit(obj.texture[a_f].image, obj.texture[a_f].rect)
+
+    def draw_background(self):
         self.screen.fill((0, 0, 0))
-        # TODO Remove comment on block render background !!!
-        # if is_hero:
-        #     self.screen.blit(self.bg_image[(anim_counter // 5) % 12].image,
-        #                      self.bg_image[(anim_counter // 5) % 12].rect)
 
     def draw_obj_without_image(self, obj):
         if isinstance(obj, Prop) or isinstance(obj, Hero):
@@ -48,8 +48,14 @@ class Graphics:
         else:
             raise Exception('Function draw_obj can`t draw this obj.')
 
+    def draw_scores(self, score):
+        score_position = (int(WIDTH * .8), 50)
+        score_text = f'score: {score}'
+
+        self.draw_text(score_text, score_position, self.color_white)
+
     def draw_text(self, text: str, coord: tuple, color: tuple):
-        f1 = pg.font.Font(None, 36)
+        f1 = pg.font.Font(None, 32)
         text_r = f1.render(text, True, color)
         self.screen.blit(text_r, coord)
 

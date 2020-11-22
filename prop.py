@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from random import randint
 
 from Interfaces import IProp
@@ -43,14 +43,22 @@ class Prop(PhysicalObject, IProp, ABC):
     def spawn(self, x: int):
         self.set_coord(x, self._spawn_height)
         self.is_spawned = True
+        self.make_visible()
+
+    @abstractmethod
+    def make_visible(self):
+        pass
 
 
 class Bird(Prop):
     def __init__(self, width: int, height: int):
         super().__init__(height, width)
-        self.texture = []
-
         self.spawn_height = BIRD_SPAWN_HEIGHT[randint(0, len(BIRD_SPAWN_HEIGHT)-1)]
+
+        self._animation_delay = 12
+        self._animation_frame_count = 2
+
+        self.texture = []
 
     def make_visible(self):
         for image in BIRD_IMAGE:

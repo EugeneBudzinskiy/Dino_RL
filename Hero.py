@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 
 from PhysxObj import PhysicalObject
 from config import HERO_SIZE, DINO_SIT_IMAGE, DINO_IMAGE, HERO_SIT_SIZE
@@ -27,7 +27,12 @@ class Hero(PhysicalObject, ABC):
 
         self._state = 'nothing'
         self._admire_state = 'nothing'
+
+        self._animation_delay = 5
+        self._animation_frame_count = 6
+
         self.texture = []
+        self.change_textures()
 
     def _squish(self):
         self.set_size(HERO_SIT_SIZE[0], HERO_SIT_SIZE[1])
@@ -80,26 +85,19 @@ class Hero(PhysicalObject, ABC):
             elif self._state == 'nothing' or self._state == 'quick-fall' and self.coord[1] >= 0:
                 self._squish()
                 self._state = 'sit'
+
         self.change_textures()
 
-    @abstractmethod
-    def change_state(self, admire_state):
-        pass
+    def change_state(self, admire_state='nothing'):
+        self._admire_state = admire_state
+        self.update_state()
 
 
 class Human(Hero):
     def __init__(self):
         super().__init__()
 
-    def change_state(self, admire_state):
-        self._admire_state = admire_state
-        self.update_state()
-
 
 class Agent(Hero):
     def __init__(self):
         super().__init__()
-
-    def change_state(self, admire_state):
-        self._admire_state = admire_state
-        self.update_state()
