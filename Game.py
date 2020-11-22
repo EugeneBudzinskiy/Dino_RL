@@ -108,10 +108,9 @@ class GameEngine:
         self.__hero = Human() if mode == HUMAN else Agent()
 
     def __key_checker(self):
-        if isinstance(self.__hero, Human):
-            pressed = pg.key.get_pressed()
-            key_arr = [pg.K_UP, pg.K_SPACE, pg.K_DOWN, pg.K_LCTRL]
-            self.__hero.change_state(pressed, key_arr)
+        pressed = pg.key.get_pressed()
+        key_arr = [pg.K_UP, pg.K_SPACE, pg.K_DOWN, pg.K_LCTRL]
+        self.__hero.change_state(pressed, key_arr)
 
     def __collision_stuff(self):
         collision_logic = CollisionLogic()
@@ -138,9 +137,11 @@ class GameEngine:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.__is_running = False
+
                 elif event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
                         self.__pause_menu()
+
                     elif event.key == pg.K_SPACE and not self.__is_alive:
                         self.__back_to_main_menu()
 
