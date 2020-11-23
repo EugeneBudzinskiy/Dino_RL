@@ -25,7 +25,12 @@ def process():
 
     else:
 
-        state_size = 4
+        engine.off_screen()
+        print("Starting TRAIN ///")
+
+        action_array = ['nothing', 'jump', 'sit']
+
+        state_size = 10
         action_size = 3
 
         agent = Interpreter(state_size, action_size)
@@ -50,7 +55,8 @@ def process():
                 agent.decrease_epsilon()
 
                 # Apply the sampled action in our environment
-                engine.step(action)
+                str_action = action_array[action]
+                engine.step(str_action)
                 next_state, reward, done = engine.get_all_info()
                 episode_reward += reward
 
@@ -76,7 +82,7 @@ def process():
             reward_window.append(episode_reward)
             running_reward = np.mean(reward_window)
 
-            if running_reward > 100000:
+            if running_reward > 500:
                 print("FINISHING...")
                 break
 

@@ -30,6 +30,10 @@ class GameEngine:
         self.__graphics = Graphics(self.screen)
         self.menu = GameMenu(self, self.screen)
 
+    @staticmethod
+    def off_screen():
+        pg.display.quit()
+
     def setup(self):
         self.is_running = True
         self.is_alive = True
@@ -108,21 +112,36 @@ class GameEngine:
         self.__environment.update()
 
     def get_state(self):
+        cur_prop = self.__environment.prop_list[0]
+
         hero_y = self.__hero.coord[1]
+        hero_x_size, hero_y_size = self.__hero.size
+        hero_vel_y = self.__hero.vel[1]
         hero_acc_y = self.__hero.acc[1]
-        prop_x, prop_y = self.__environment.prop_list[0].coord
+
+        prop_x, prop_y = cur_prop.coord
+        prop_x_size, prop_y_size = cur_prop.size
+        prop_vel_x = cur_prop.vel[0]
 
         hero_y /= self.__height
+        hero_x_size /= 100
+        hero_y_size /= 100
+        hero_vel_y /= 100
         hero_acc_y /= self.__hero.get_max_acc()
+
         prop_x /= self.__width
         prop_y /= self.__height
+        prop_x_size /= 100
+        prop_y_size /= 100
+        prop_vel_x /= 100
 
-        result = [hero_y, hero_acc_y, prop_x, prop_y]
+        result = [hero_y, hero_x_size, hero_y_size, hero_vel_y, hero_acc_y,
+                  prop_x, prop_x, prop_x_size, prop_y_size, prop_vel_x]
         return result
 
     def get_all_info(self):
         next_state = self.get_state()
-        reward = self.__score
+        reward = 1
         done = not self.is_alive
 
         return next_state, reward, done

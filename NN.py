@@ -1,8 +1,8 @@
+from config import *
+
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
-
-from config import LEARNING_RATE
 
 
 class NeuralNetwork:
@@ -10,8 +10,8 @@ class NeuralNetwork:
         self.input_size = input_size
         self.output_size = output_size
 
-        self.hidden_size_1 = 512
-        self.hidden_size_2 = 256
+        self.hidden_size_1 = 256
+        self.hidden_size_2 = 128
 
         inputs = keras.layers.Input(shape=(input_size,))
         layer1 = keras.layers.Dense(self.hidden_size_1, activation="relu")(inputs)
@@ -66,12 +66,12 @@ class Memory:
         """Randomly sample a batch of experiences from memory."""
         indices = np.random.choice(self.__len__(), batch_size)
 
-        actions = [self.__action_array[i] for i in indices]
-        states = np.array([self.__state_array[i] for i in indices])
-        next_states = np.array([self.__next_state_array[i] for i in indices])
-        rewards = [self.__reward_array[i] for i in indices]
+        actions = [self.__action_array[x] for x in indices]
+        states = np.array([self.__state_array[x] for x in indices])
+        next_states = np.array([self.__next_state_array[x] for x in indices])
+        rewards = [self.__reward_array[x] for x in indices]
         dones = tf.convert_to_tensor(
-            [float(self.__done_array[i]) for i in indices]
+            [float(self.__done_array[x]) for x in indices]
         )
 
         return actions, states, next_states, rewards, dones
