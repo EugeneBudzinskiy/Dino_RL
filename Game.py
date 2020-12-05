@@ -1,166 +1,152 @@
-import pygame_menu as pgm
-
 from CollisionLogic import CollisionLogic
 from Env import Environment
 from Graphics import Graphics
-from Hero import Human, Hero, Agent
+from Hero import Hero
 from config import *
 from menu import GameMenu
-from prop import Cactus, Bird
-from CustomException import SaveNNException, LoadNNException
-from Saver import Saver
 
 
 class GameEngine:
     def __init__(self):
-        self.__is_running = False
-        self.__is_alive = False
+        self.is_running = False
+        self.is_human = True
+        self.is_alive = False
+        self.is_train = False
 
-        self.__animation_counter = 0
-        self.__waiter_counter = 0
+        self.__hero = Hero()
+
         self.__score = 0
+        self.__action_queue = []
 
-        self.__clock = None
         self.__width = WIDTH
         self.__height = HEIGHT
-        self.__hero = None
-        self.__is_human = None
 
-        self.__visible_obj = []
-        self.screen = pg.display.set_mode((self.__width, self.__height))
-
+        self.__clock = None
         self.__environment = None
-        self.__graphics = Graphics(self.screen)
+
+        self.screen = pg.display.set_mode((self.__width, self.__height))
 
         pg.init()
 
-    def __create_level(self):
-        self.__environment.spawn_prop(FIRST_SPAWN_DISTANCE)
-        for props in range(0, NUMBER_OF_EXISTING_PROP):
-            self.__environment.spawn_prop()
+        self.__graphics = Graphics(self.screen)
+        self.menu = GameMenu(self, self.screen)
 
-    def __continue_game(self):
-        self.__update()
+    @staticmethod
+    def off_screen():
+        pg.display.quit()
 
-    def __back_to_main_menu(self):
-        menu = GameMenu(GameEngine())
-        menu.start_menu(not self.__is_human)
-
-    def __pause_menu(self):
-        menu = pgm.Menu(300, 400, 'Pause', theme=pgm.themes.THEME_DARK)
-        menu.add_button('Continue', self.__continue_game)
-        menu.add_button('End Game', self.__back_to_main_menu)
-        menu.add_button('Exit', pgm.events.EXIT)
-        menu.mainloop(self.screen)
-
-    def __draw_visible_obj(self):
-        self.__visible_obj = []
-        self.__visible_obj.append(self.__hero)
-
-        for prop in self.__environment.prop_list:
-            if prop.coord[0] < self.__width - prop.size[0]:
-                self.__visible_obj.append(prop)
-
-        for obj in self.__visible_obj:
-            if isinstance(self.__hero, Agent):
-                self.__graphics.draw_obj_without_image(obj)
-            elif isinstance(obj, Hero):
-                self.__graphics.draw_obj(obj, (self.__animation_counter // 5) % 6)
-            elif isinstance(obj, Cactus):
-                if not obj.is_visible:
-                    obj.make_visible()
-                self.__graphics.draw_obj(obj, 0)
-            elif isinstance(obj, Bird):
-                if not obj.is_visible:
-                    obj.make_visible()
-                self.__graphics.draw_obj(obj, (self.__animation_counter // 12) % 2)
+    def save_the_progress(self):
+        if not self.is_human:
+            pass
 
     def setup(self):
-        self.__is_running = True
-        self.__waiter_counter = 0
-        self.__animation_counter = 0
+        self.is_running = True
+        self.is_alive = True
 
+        self.__action_queue = []
+        self.__score = 0
+
+        self.__hero = Hero()
         self.__environment = Environment()
-        self.__create_level()
+
+        self.__environment.create_level()
         self.__clock = pg.time.Clock()
 
-        self.__update()
+    def __key_checker(self, event):
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_ESCAPE:
+                self.menu.pause_menu()
 
-    def save_process(self):
-        try:
-            weights = self.__hero.save_weights()
-            saver = Saver(self.__hero.file_path)
-            saver.save(weights)
-        except SaveNNException as e:
-            print(f'!!! Error: {e.message}')
+            elif event.key == pg.K_SPACE:
+                if not self.is_alive:
+                    self.menu.start_menu()
 
-    def load_process(self):
-        try:
-            saver = Saver(self.__hero.file_path)
-            json_weights = saver.load()
-            self.__hero.load_weights(json_weights)
-        except LoadNNException as e:
-            print(f'!!! Error: {e}')
+                elif 'jump' not in self.__action_queue:
+                    self.__action_queue.append('jump')
 
-    def set_hero(self, mode):
-        self.__is_alive = True
-        self.__is_human = not mode
-        self.__hero = Human() if mode == HUMAN else Agent()
+            elif event.key == pg.K_LCTRL:
+                if 'sit' not in self.__action_queue:
+                    self.__action_queue.append('sit')
 
-    def __key_checker(self):
-        pressed = pg.key.get_pressed()
-        key_arr = [pg.K_UP, pg.K_SPACE, pg.K_DOWN, pg.K_LCTRL]
-        self.__hero.change_state(pressed, key_arr)
+        elif event.type == pg.KEYUP:
+            if event.key == pg.K_SPACE:
+                if 'jump' in self.__action_queue:
+                    self.__action_queue.remove('jump')
 
-    def __collision_stuff(self):
+            elif event.key == pg.K_LCTRL:
+                if 'sit' in self.__action_queue:
+                    self.__action_queue.remove('sit')
+
+    def get_action_from_key_check(self):
+        if len(self.__action_queue) == 0:
+            return 'nothing'
+        else:
+            return self.__action_queue[0]
+
+    def __collision_check(self):
         collision_logic = CollisionLogic()
         current_prop = self.__environment.prop_list[0]
 
         if collision_logic.check_collision(self.__hero, current_prop):
-            self.__is_alive = False
+            self.is_alive = False
 
-    def __animation_counter_stuff(self):
-        self.__animation_counter = (self.__animation_counter + 1) % FPS
-        if self.__animation_counter % 10 == 0:
-            self.__score += 1
+    def render(self):
+        self.__clock.tick(FPS)
 
-    def __waiter_counter_stuff(self):
-        self.__waiter_counter += 1
-        if self.__waiter_counter >= FPS * 4:
-            self.__waiter_counter = 0
-            self.__back_to_main_menu()
-
-    def __update(self):
-        while self.__is_running:
-            self.__clock.tick(FPS)
-
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    self.__is_running = False
-
-                elif event.type == pg.KEYDOWN:
-                    if event.key == pg.K_ESCAPE:
-                        self.__pause_menu()
-
-                    elif event.key == pg.K_SPACE and not self.__is_alive:
-                        self.__back_to_main_menu()
-
-            if self.__is_alive:
-                if self.__is_human:
-                    self.__key_checker()
-
-                self.__collision_stuff()
-                self.__animation_counter_stuff()
-
-                self.__hero.update()
-                self.__environment.update()
-
-                self.__graphics.draw_background(self.__animation_counter, isinstance(self.__hero, Human))
-                self.__graphics.draw_text("score:{}".format(self.__score), (980, 50), (255, 255, 255))
-                self.__draw_visible_obj()
-
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                exit(0)
             else:
-                self.__graphics.draw_wasted_screen()
-                self.__waiter_counter_stuff()
+                self.__key_checker(event)
 
-            pg.display.update()
+        if not self.is_alive:
+            finishing = self.__graphics.draw_wasted_screen()
+            if finishing:
+                self.menu.start_menu()
+        else:
+            visible_obj = self.__environment.prop_list
+            self.__graphics.draw(self.__hero, visible_obj, self.__score)
+
+        pg.display.update()
+
+    def step(self, action):
+        self.__score += 1
+        self.__hero.change_state(action)
+        self.__hero.update()
+        self.__collision_check()
+        self.__environment.update()
+
+    def get_state(self):
+        cur_prop = self.__environment.prop_list[0]
+
+        hero_y = self.__hero.coord[1]
+        hero_x_size, hero_y_size = self.__hero.size
+        hero_vel_y = self.__hero.vel[1]
+        hero_acc_y = self.__hero.acc[1]
+
+        prop_x, prop_y = cur_prop.coord
+        prop_x_size, prop_y_size = cur_prop.size
+        prop_vel_x = cur_prop.vel[0]
+
+        hero_y /= self.__height
+        hero_x_size /= 100
+        hero_y_size /= 100
+        hero_vel_y /= 100
+        hero_acc_y /= self.__hero.get_max_acc()
+
+        prop_x /= self.__width
+        prop_y /= self.__height
+        prop_x_size /= 100
+        prop_y_size /= 100
+        prop_vel_x /= 100
+
+        result = [hero_y, hero_x_size, hero_y_size, hero_vel_y, hero_acc_y,
+                  prop_x, prop_x, prop_x_size, prop_y_size, prop_vel_x]
+        return result
+
+    def get_all_info(self):
+        next_state = self.get_state()
+        reward = 1
+        done = not self.is_alive
+
+        return next_state, reward, done

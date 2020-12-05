@@ -1,4 +1,6 @@
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 import pygame as pg
 
@@ -33,6 +35,33 @@ for i in range(1, 7):
     DINO_SIT_IMAGE.append(pg.image.load(os.path.join("texture", 'DinoSit-{}.png'.format(i))))
     DINO_IMAGE.append(pg.image.load(os.path.join("texture", 'Dino-{}.png'.format(i))))
 
-CACTUS_IMAGE = [pg.image.load(os.path.join("texture", 'Cactus1.png')), pg.image.load(os.path.join("texture", 'Cactus2.png'))]
-BIRD_IMAGE = [pg.image.load(os.path.join("texture", 'Bird-1.png')), pg.image.load(os.path.join("texture", 'Bird-2.png'))]
+CACTUS_IMAGE = [pg.image.load(os.path.join("texture", 'Cactus1.png')),
+                pg.image.load(os.path.join("texture", 'Cactus2.png'))]
+BIRD_IMAGE = [pg.image.load(os.path.join("texture", 'Bird-1.png')),
+              pg.image.load(os.path.join("texture", 'Bird-2.png'))]
 WASTED_IMAGE = pg.image.load(os.path.join("texture", "wasted-1.png"))
+
+
+# Neural Network Part
+
+EPISODE_COUNT = 5000
+MAX_STEPS_PER_EPISODE = 1000
+
+BUFFER_SIZE = int(1e6)
+BATCH_SIZE = 32
+
+UPDATE_AFTER_FRAME = 2
+SYNC_AFTER_FRAME = 10000
+
+LEARNING_RATE = 1e-4
+GAMMA = 0.99
+
+EPSILON = 1.0
+EPSILON_MIN = 0.001
+EPSILON_MAX = 1.0
+EPSILON_INTERVAL = EPSILON_MAX - EPSILON_MIN
+
+EPSILON_GREEDY_FRAMES = 10000
+EPSILON_RANDOM_FRAMES = 5000
+
+FILE_PATH = "weights"
