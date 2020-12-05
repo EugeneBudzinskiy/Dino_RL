@@ -11,6 +11,7 @@ class GameEngine:
         self.is_running = False
         self.is_human = True
         self.is_alive = False
+        self.is_train = False
 
         self.__hero = Hero()
 
@@ -33,6 +34,10 @@ class GameEngine:
     @staticmethod
     def off_screen():
         pg.display.quit()
+
+    def save_the_progress(self):
+        if not self.is_human:
+            pass
 
     def setup(self):
         self.is_running = True

@@ -24,9 +24,7 @@ def process():
             engine.step(action)
 
     else:
-
-        engine.off_screen()
-        print("Starting TRAIN ///")
+        train_flag = engine.is_train
 
         action_array = ['nothing', 'jump', 'sit']
 
@@ -34,57 +32,76 @@ def process():
         action_size = 3
 
         agent = Interpreter(state_size, action_size)
-        reward_window = deque(maxlen=100)
-        running_reward = 0
-        frame_count = 0
 
-        for i_episode in range(1, EPISODE_COUNT + 1):
-            engine.setup()
-            state = engine.get_state()
+        if not train_flag:
+            agent.brain.load_weights()
 
-            episode_reward = 0
+            while engine.is_running:
+                engine.render()
 
-            for t in range(1, MAX_STEPS_PER_EPISODE + 1):
-                # engine.render()  # Adding this line would show the attempts
-                frame_count += 1
+                state = engine.get_state()
 
-                # Use epsilon-greedy for exploration
-                action = agent.choose_action(state, frame_count)
-
-                # Decay probability of taking random action
-                agent.decrease_epsilon()
-
-                # Apply the sampled action in our environment
+                action = agent.get_guess(state)
                 str_action = action_array[action]
+
                 engine.step(str_action)
-                next_state, reward, done = engine.get_all_info()
-                episode_reward += reward
 
-                # Save actions and states in replay buffer
-                agent.add_to_memory(action, state, next_state, reward, done)
-                state = next_state
+        else:
+            engine.off_screen()
+            print("Starting TRAIN ///")
 
-                # Update every fourth frame
-                if frame_count % UPDATE_AFTER_FRAME == 0 and len(agent.memory) > BATCH_SIZE:
-                    agent.train()
+            reward_window = deque(maxlen=100)
+            running_reward = 0
+            frame_count = 0
 
-                if frame_count % SYNC_AFTER_FRAME == 0:
-                    # update the the target network with new weights
-                    agent.sync_target_weights()
+            for i_episode in range(1, EPISODE_COUNT + 1):
+                engine.setup()
+                state = engine.get_state()
 
-                    # Log details
-                    template = "running reward: {:.2f} at episode {}, frame count {}"
-                    print(template.format(running_reward, i_episode, frame_count))
+                episode_reward = 0
 
-                if not engine.is_alive:
+                for t in range(1, MAX_STEPS_PER_EPISODE + 1):
+                    # engine.render()  # Adding this line would show the attempts
+                    frame_count += 1
+
+                    # Use epsilon-greedy for exploration
+                    action = agent.choose_action(state, frame_count)
+
+                    # Decay probability of taking random action
+                    agent.decrease_epsilon()
+
+                    # Apply the sampled action in our environment
+                    str_action = action_array[action]
+                    engine.step(str_action)
+                    next_state, reward, done = engine.get_all_info()
+                    episode_reward += reward
+
+                    # Save actions and states in replay buffer
+                    agent.add_to_memory(action, state, next_state, reward, done)
+                    state = next_state
+
+                    # Update every fourth frame
+                    if frame_count % UPDATE_AFTER_FRAME == 0 and len(agent.memory) > BATCH_SIZE:
+                        agent.train()
+
+                    if frame_count % SYNC_AFTER_FRAME == 0:
+                        # update the the target network with new weights
+                        agent.sync_target_weights()
+
+                        # Log details
+                        template = "running reward: {:.2f} at episode {}, frame count {}"
+                        print(template.format(running_reward, i_episode, frame_count))
+
+                    if not engine.is_alive:
+                        break
+
+                reward_window.append(episode_reward)
+                running_reward = np.mean(reward_window)
+
+                if running_reward > 500:
+                    agent.brain.save_weights()
+                    print("FINISHING...")
                     break
-
-            reward_window.append(episode_reward)
-            running_reward = np.mean(reward_window)
-
-            if running_reward > 500:
-                print("FINISHING...")
-                break
 
 
 if __name__ == '__main__':

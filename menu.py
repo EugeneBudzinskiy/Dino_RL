@@ -31,11 +31,15 @@ class GameMenu:
         self.engine.setup()
         self.__process_func()
 
-    def save_it(self):
-        pass
+    def train_it(self):
+        self.engine.is_train = True
+        self.engine.setup()
+        self.__process_func()
 
-    def load_it(self):
-        pass
+    def test_it(self):
+        self.engine.is_train = False
+        self.engine.setup()
+        self.__process_func()
 
     def start_menu(self):
         self.menu = pygame_menu.Menu(300, 400, 'Dino with RL', theme=pygame_menu.themes.THEME_DARK)
@@ -47,8 +51,8 @@ class GameMenu:
         else:
             self.menu.add_button('Play',  self.start_like_agent)
             self.menu.add_button('HUMAN', self.start_like_human)
-            self.menu.add_button('Save',  self.save_it)
-            self.menu.add_button('Load',  self.load_it)
+            self.menu.add_button('Train',  self.train_it)
+            self.menu.add_button('Test',  self.test_it)
 
         self.menu.add_button('Exit', pygame_menu.events.EXIT)
         self.menu.mainloop(self.screen)

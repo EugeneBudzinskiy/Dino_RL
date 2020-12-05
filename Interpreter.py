@@ -4,7 +4,8 @@ import tensorflow as tf
 from NN import NeuralNetwork, Memory
 from config import GAMMA
 from config import BUFFER_SIZE, BATCH_SIZE
-from config import EPSILON, EPSILON_MIN, EPSILON_INTERVAL, EPSILON_GREEDY_FRAMES, EPSILON_RANDOM_FRAMES
+from config import EPSILON, EPSILON_MIN, EPSILON_INTERVAL
+from config import EPSILON_GREEDY_FRAMES, EPSILON_RANDOM_FRAMES
 
 
 class Interpreter:
@@ -26,18 +27,24 @@ class Interpreter:
         self.epsilon -= EPSILON_INTERVAL / EPSILON_GREEDY_FRAMES
         self.epsilon = max(self.epsilon, EPSILON_MIN)
 
+    def get_guess(self, input_data):
+        # Predict action Q-values
+        # From environment state
+        state_tensor = tf.convert_to_tensor(input_data)
+        state_tensor = tf.expand_dims(state_tensor, 0)
+        action_prob = self.brain.model(state_tensor, training=False)
+        # Take best action
+        action = tf.argmax(action_prob[0]).numpy()
+
+        return action
+
     def choose_action(self, input_data, frame_count):
         if frame_count < EPSILON_RANDOM_FRAMES or self.epsilon > np.random.rand(1)[0]:
             # Take random action
             action = np.random.choice(self.action_size)
         else:
             # Predict action Q-values
-            # From environment state
-            state_tensor = tf.convert_to_tensor(input_data)
-            state_tensor = tf.expand_dims(state_tensor, 0)
-            action_prob = self.brain.model(state_tensor, training=False)
-            # Take best action
-            action = tf.argmax(action_prob[0]).numpy()
+            action = self.get_guess(input_data)
 
         return action
 
@@ -75,6 +82,3 @@ class Interpreter:
         # Backpropagation
         grads = tape.gradient(loss, self.brain.model.trainable_variables)
         self.brain.optimizer.apply_gradients(zip(grads, self.brain.model.trainable_variables))
-
-
-
