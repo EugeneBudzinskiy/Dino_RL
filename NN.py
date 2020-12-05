@@ -27,12 +27,12 @@ class NeuralNetwork:
 
     def save_weights(self, file_prefix=500):
         path = FILE_PATH + '_' + str(file_prefix)
-        self.model.save_weights(path)
+        self.model.save(path)
 
     def load_weights(self):
         path = FILE_PATH
         try:
-            self.model.load_weights(path)
+            self.model = keras.models.load_model(path, compile=False)
         except NotFoundError:
             raise LoadNNException(path) from None
 
