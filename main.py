@@ -2,7 +2,7 @@ import numpy as np
 from collections import deque
 
 from Game import GameEngine
-from Interpreter import Interpreter
+from AgentLogic import AgentLogic
 from config import BATCH_SIZE
 from config import EPISODE_COUNT, MAX_STEPS_PER_EPISODE
 from config import UPDATE_AFTER_FRAME, SYNC_AFTER_FRAME
@@ -31,7 +31,7 @@ def process():
         state_size = 10
         action_size = 3
 
-        agent = Interpreter(state_size, action_size)
+        agent = AgentLogic(state_size, action_size)
 
         if not train_flag:
             agent.brain.load_weights()

@@ -95,13 +95,3 @@ class Hero(PhysicalObject, ABC):
     def change_state(self, admire_state='nothing'):
         self._admire_state = admire_state
         self.update_state()
-
-
-class Human(Hero):
-    def __init__(self):
-        super().__init__()
-
-
-class Agent(Hero):
-    def __init__(self):
-        super().__init__()

@@ -9,9 +9,9 @@ from menu import GameMenu
 class GameEngine:
     def __init__(self):
         self.is_running = False
-        self.is_human = True
         self.is_alive = False
         self.is_train = False
+        self.is_human = True
 
         self.__hero = Hero()
 
@@ -34,10 +34,6 @@ class GameEngine:
     @staticmethod
     def off_screen():
         pg.display.quit()
-
-    def save_the_progress(self):
-        if not self.is_human:
-            pass
 
     def setup(self):
         self.is_running = True
@@ -105,7 +101,7 @@ class GameEngine:
                 self.menu.start_menu()
         else:
             visible_obj = self.__environment.prop_list
-            self.__graphics.draw(self.__hero, visible_obj, self.__score)
+            self.__graphics.draw(self.__hero, visible_obj, self.__score, False)  # TODO EZZ Flag. (REMOVE!!!)
 
         pg.display.update()
 

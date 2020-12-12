@@ -27,12 +27,16 @@ class Graphics:
         self._waiter_animation_counter = 0
         self._waiter_animation_delay = FPS // 10
 
-    def draw(self, hero, visible_objects: list, score: int):
+    def draw(self, hero, visible_objects: list, score: int, flag=True):
         self._current_frame = (self._current_frame + 1) % self._animation_delay
         if self._current_frame == 0:
             self._animation_frame = (self._animation_frame + 1) % self._animation_frame_count
 
-        self.draw_background()
+        self.screen.fill((0, 0, 0))
+
+        if flag:
+            self.draw_background()
+
         self.draw_scores(score)
         self.draw_obj(hero)
         self.draw_obj(visible_objects)
@@ -51,7 +55,6 @@ class Graphics:
         self.screen.blit(obj.texture[a_f].image, obj.texture[a_f].rect)
 
     def draw_background(self):
-        self.screen.fill((0, 0, 0))
         a_f = self._animation_frame
         draw_img = self.bg_image[a_f].image
         draw_rect = self.bg_image[a_f].rect
