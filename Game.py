@@ -86,32 +86,6 @@ class GameEngine:
         if collision_logic.check_collision(self.__hero, current_prop):
             self.is_alive = False
 
-    def render(self):
-        self.__clock.tick(FPS)
-
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                exit(0)
-            else:
-                self.__key_checker(event)
-
-        if not self.is_alive:
-            finishing = self.__graphics.draw_wasted_screen()
-            if finishing:
-                self.menu.start_menu()
-        else:
-            visible_obj = self.__environment.prop_list
-            self.__graphics.draw(self.__hero, visible_obj, self.__score, False)  # TODO EZZ Flag. (REMOVE!!!)
-
-        pg.display.update()
-
-    def step(self, action):
-        self.__score += 1
-        self.__hero.change_state(action)
-        self.__hero.update()
-        self.__collision_check()
-        self.__environment.update()
-
     def get_state(self):
         cur_prop = self.__environment.prop_list[0]
 
@@ -137,7 +111,7 @@ class GameEngine:
         prop_vel_x /= 100
 
         result = [hero_y, hero_x_size, hero_y_size, hero_vel_y, hero_acc_y,
-                  prop_x, prop_x, prop_x_size, prop_y_size, prop_vel_x]
+                  prop_x, prop_y, prop_x_size, prop_y_size, prop_vel_x]
         return result
 
     def get_all_info(self):
@@ -146,3 +120,34 @@ class GameEngine:
         done = not self.is_alive
 
         return next_state, reward, done
+
+    def render(self):
+        self.__clock.tick(FPS)
+
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                exit(0)
+            else:
+                self.__key_checker(event)
+
+        if not self.is_alive:
+            # finishing = self.__graphics.draw_wasted_screen()
+            # if finishing:
+            #     self.menu.start_menu()
+            pass
+        else:
+            visible_obj = self.__environment.prop_list
+            self.__graphics.draw(self.__hero, visible_obj, self.__score, False)  # TODO EZZ Flag. (REMOVE!!!)
+
+        pg.display.update()
+
+    def step(self, action):
+        self.__score += 1
+
+        self.__collision_check()
+
+        self.__hero.change_state(action)
+        self.__hero.update()
+        self.__environment.update()
+
+

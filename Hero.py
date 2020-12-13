@@ -1,7 +1,8 @@
 from abc import ABC
 
 from PhysxObj import PhysicalObject
-from config import HERO_SIZE, DINO_SIT_IMAGE, DINO_IMAGE, HERO_SIT_SIZE
+from config import DINO_SIT_IMAGE, DINO_IMAGE
+from config import HERO_SIZE, HERO_SIT_SIZE
 from image import Image
 
 
@@ -18,12 +19,11 @@ class Hero(PhysicalObject, ABC):
 
     def __init__(self):
         super().__init__()
-        self._gravity_acc = -1
-        self._jump_vel = 20
-        self.mul_grav = 5
+        self._gravity_acc = -70
+        self._jump_vel = 1300
+        self.mul_grav = 6
 
         self.set_size(HERO_SIZE[0], HERO_SIZE[1])
-        self.set_col_size(int(HERO_SIZE[0] * .75), int(HERO_SIZE[1] * .75))
         self.set_acc(0, self._gravity_acc)
 
         self._state = 'nothing'
@@ -67,7 +67,7 @@ class Hero(PhysicalObject, ABC):
 
     def update_state(self):
         if self._admire_state == 'nothing':
-            if self.coord[1] >= 0:
+            if self.coord[1] <= 0:
                 if self._state == 'sit':
                     self._un_squish()
                 self._state = 'nothing'
@@ -79,7 +79,7 @@ class Hero(PhysicalObject, ABC):
                 self._jump()
                 self._fall()
                 self._state = 'jump'
-            elif self.coord[1] >= 0 and self._state == 'jump':
+            elif self.coord[1] <= 0 and self._state == 'jump':
                 self._state = 'nothing'
 
         elif self._admire_state == 'sit':
