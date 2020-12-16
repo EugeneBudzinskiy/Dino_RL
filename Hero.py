@@ -1,9 +1,11 @@
 from abc import ABC
 
 from PhysxObj import PhysicalObject
+from image import Image
 from config import DINO_SIT_IMAGE, DINO_IMAGE
 from config import HERO_SIZE, HERO_SIT_SIZE
-from image import Image
+from config import HERO_JUMP_VEL
+from config import GRAVITY_ACC, GRAVITY_ACC_MULTPLY
 
 
 class Hero(PhysicalObject, ABC):
@@ -19,9 +21,10 @@ class Hero(PhysicalObject, ABC):
 
     def __init__(self):
         super().__init__()
-        self._gravity_acc = -70
-        self._jump_vel = 1300
-        self.mul_grav = 6
+        self._gravity_acc = GRAVITY_ACC
+        self.mul_grav = GRAVITY_ACC_MULTPLY
+
+        self._jump_vel = HERO_JUMP_VEL
 
         self.set_size(HERO_SIZE[0], HERO_SIZE[1])
         self.set_acc(0, self._gravity_acc)
@@ -34,9 +37,6 @@ class Hero(PhysicalObject, ABC):
 
         self.texture = []
         self.change_textures()
-
-    def get_max_acc(self):
-        return abs(self._gravity_acc * self.mul_grav)
 
     def _squish(self):
         self.set_size(HERO_SIT_SIZE[0], HERO_SIT_SIZE[1])

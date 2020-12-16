@@ -2,8 +2,8 @@ from CollisionLogic import CollisionLogic
 from Env import Environment
 from Graphics import Graphics
 from Hero import Hero
-from config import *
 from menu import GameMenu
+from config import *
 
 
 class GameEngine:
@@ -131,13 +131,12 @@ class GameEngine:
                 self.__key_checker(event)
 
         if not self.is_alive:
-            # finishing = self.__graphics.draw_wasted_screen()
-            # if finishing:
-            #     self.menu.start_menu()
-            pass
+            finished = self.__graphics.draw_wasted_screen()
+            if finished:
+                self.menu.start_menu()
         else:
             visible_obj = self.__environment.prop_list
-            self.__graphics.draw(self.__hero, visible_obj, self.__score, False)  # TODO EZZ Flag. (REMOVE!!!)
+            self.__graphics.draw(self.__hero, visible_obj, self.__score, STANDARD_MODE)
 
         pg.display.update()
 
@@ -149,5 +148,3 @@ class GameEngine:
         self.__hero.change_state(action)
         self.__hero.update()
         self.__environment.update()
-
-

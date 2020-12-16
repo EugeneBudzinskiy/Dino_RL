@@ -20,13 +20,7 @@ class CollisionLogic:
         prop_right_up_x = prop_coord[0] + prop_size[0]
         prop_right_up_y = prop_coord[1] + prop_size[1]
 
-        # result_a = hero_right_up_x > prop_left_down_x and hero_left_down_y < prop_right_up_y
-        # result_b = hero_left_down_x < prop_right_up_x and hero_right_up_y > prop_left_down_y
-
         result_a = hero_right_up_x > prop_left_down_x and hero_left_down_x < prop_right_up_x
         result_b = hero_right_up_y > prop_left_down_y and hero_left_down_y < prop_right_up_y
-
-        if result_a and result_b:
-            print(hero_left_down_y, prop_right_up_y)
 
         return result_a and result_b

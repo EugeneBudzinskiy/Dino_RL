@@ -48,24 +48,7 @@ class Graphics:
         else:
             self.draw_single_obj(obj)
 
-    # TODO TEST SHIT 2
-    def draw_fookin_frame(self, obj):
-        red_color = (255, 0, 0)
-        coord = obj.get_coord_normalized()
-        end_coord = obj.size
-
-        rect_ = pg.Rect(
-            coord[0],
-            coord[1],
-            end_coord[0],
-            end_coord[1]
-        )
-
-        pg.draw.rect(self.screen, red_color, rect_, 2)
-
     def draw_single_obj(self, obj):
-        self.draw_fookin_frame(obj)
-
         a_f = obj.animation_frame
         cur_coord = obj.get_coord_normalized()
         obj.texture[a_f].change_location([cur_coord[0], cur_coord[1]])
