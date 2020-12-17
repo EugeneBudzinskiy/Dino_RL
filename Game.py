@@ -91,27 +91,31 @@ class GameEngine:
 
         hero_y = self.__hero.coord[1]
         hero_x_size, hero_y_size = self.__hero.size
+        hero_r_u_x = hero_x_size
+        hero_r_u_y = hero_y + hero_y_size
         hero_vel_y = self.__hero.vel[1]
         hero_acc_y = self.__hero.acc[1]
 
         prop_x, prop_y = cur_prop.coord
         prop_x_size, prop_y_size = cur_prop.size
+        prop_r_u_x = prop_x + prop_x_size
+        prop_r_u_y = prop_y + prop_y_size
         prop_vel_x = cur_prop.vel[0]
 
         hero_y /= self.__height
-        hero_x_size /= 100
-        hero_y_size /= 100
-        hero_vel_y /= 100
-        hero_acc_y /= self.__hero.get_max_acc()
+        hero_r_u_x /= self.__width
+        hero_r_u_y /= self.__height
+        hero_vel_y /= MAX_VEL
+        hero_acc_y /= MAX_ACC
 
         prop_x /= self.__width
         prop_y /= self.__height
-        prop_x_size /= 100
-        prop_y_size /= 100
-        prop_vel_x /= 100
+        prop_r_u_x /= self.__width
+        prop_r_u_y /= self.__height
+        prop_vel_x /= MAX_VEL
 
-        result = [hero_y, hero_x_size, hero_y_size, hero_vel_y, hero_acc_y,
-                  prop_x, prop_y, prop_x_size, prop_y_size, prop_vel_x]
+        result = [hero_y, hero_r_u_x, hero_r_u_y, hero_vel_y, hero_acc_y,
+                  prop_x, prop_y, prop_r_u_x, prop_r_u_y, prop_vel_x]
         return result
 
     def get_all_info(self):

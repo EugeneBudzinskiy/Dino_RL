@@ -38,7 +38,8 @@ class PhysicalObject(IPhysicalObject, ABC):
         return self._size
 
     def get_coord_normalized(self):
-        return self._coord[0] + GLOBAL_OFFSET, - (self._coord[1] + self._size[1] - HEIGHT + GROUND_LEVEL)
+        return self._coord[0] + GLOBAL_OFFSET, \
+               - (self._coord[1] + self._size[1] - HEIGHT + GROUND_LEVEL)
 
     def set_vel(self, x_vel: int, y_vel: int):
         x_vel /= FPS

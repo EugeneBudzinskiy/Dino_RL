@@ -5,7 +5,7 @@ from image import Image
 from config import DINO_SIT_IMAGE, DINO_IMAGE
 from config import HERO_SIZE, HERO_SIT_SIZE
 from config import HERO_JUMP_VEL
-from config import GRAVITY_ACC, GRAVITY_ACC_MULTPLY
+from config import GRAVITY_ACC, MAX_GRAVITY_ACC
 
 
 class Hero(PhysicalObject, ABC):
@@ -22,7 +22,7 @@ class Hero(PhysicalObject, ABC):
     def __init__(self):
         super().__init__()
         self._gravity_acc = GRAVITY_ACC
-        self.mul_grav = GRAVITY_ACC_MULTPLY
+        self._max_gravity_acc = MAX_GRAVITY_ACC
 
         self._jump_vel = HERO_JUMP_VEL
 
@@ -51,7 +51,7 @@ class Hero(PhysicalObject, ABC):
         self.set_acc(0, self._gravity_acc)
 
     def _quick_fall(self):
-        self.set_acc(0, self._gravity_acc * self.mul_grav)
+        self.set_acc(0, self._max_gravity_acc)
 
     def get_state(self):
         return self._state
@@ -74,7 +74,7 @@ class Hero(PhysicalObject, ABC):
                 self._fall()
 
         elif self._admire_state == 'jump':
-            if self._state == 'nothing' or self._state == 'sit':
+            if self._state == 'nothing' or self._state == 'sit' and self.coord[1] == 0:
                 self._un_squish()
                 self._jump()
                 self._fall()
