@@ -13,7 +13,7 @@ class NeuralNetwork:
         self.output_size = output_size
 
         self.hidden_size_1 = 256
-        self.hidden_size_2 = 128
+        self.hidden_size_2 = 256
 
         inputs = keras.layers.Input(shape=(input_size,))
         layer1 = keras.layers.Dense(self.hidden_size_1, activation="relu")(inputs)

@@ -24,6 +24,8 @@ def process():
             engine.step(action)
 
     else:
+        max_reward = 0
+
         train_flag = engine.is_train
 
         action_array = ['nothing', 'jump', 'sit']
@@ -61,7 +63,6 @@ def process():
                 episode_reward = 0
 
                 for t in range(1, MAX_STEPS_PER_EPISODE + 1):
-                    # engine.render()  # Adding this line would show the attempts
                     frame_count += 1
 
                     # Use epsilon-greedy for exploration
@@ -85,6 +86,11 @@ def process():
                         agent.train()
 
                     if frame_count % SYNC_AFTER_FRAME == 0:
+
+                        if running_reward > max_reward:
+                            max_reward = running_reward
+                            agent.brain.save_weights(max_reward)
+
                         # update the the target network with new weights
                         agent.sync_target_weights()
 

@@ -42,25 +42,27 @@ class GameMenu:
         self.__process_func()
 
     def start_menu(self):
-        self.menu = pygame_menu.Menu(300, 400, 'Dino with RL', theme=pygame_menu.themes.THEME_DARK)
+        if not self.engine.is_train:
+            self.menu = pygame_menu.Menu(300, 400, 'Dino with RL', theme=pygame_menu.themes.THEME_DARK)
 
-        if self.engine.is_human:
-            self.menu.add_button('Play', self.start_like_human)
-            self.menu.add_button('AI',   self.start_like_agent)
+            if self.engine.is_human:
+                self.menu.add_button('Play', self.start_like_human)
+                self.menu.add_button('AI', self.start_like_agent)
 
-        else:
-            self.menu.add_button('Play',  self.start_like_agent)
-            self.menu.add_button('HUMAN', self.start_like_human)
-            self.menu.add_button('Train',  self.train_it)
-            self.menu.add_button('Test',  self.test_it)
+            else:
+                self.menu.add_button('Play', self.start_like_agent)
+                self.menu.add_button('HUMAN', self.start_like_human)
+                self.menu.add_button('Train', self.train_it)
+                self.menu.add_button('Test', self.test_it)
 
-        self.menu.add_button('Exit', pygame_menu.events.EXIT)
-        self.menu.mainloop(self.screen)
+            self.menu.add_button('Exit', pygame_menu.events.EXIT)
+            self.menu.mainloop(self.screen)
 
     def pause_menu(self):
-        self.menu = pygame_menu.Menu(300, 400, 'Dino with RL', theme=pygame_menu.themes.THEME_DARK)
+        if not self.engine.is_train:
+            self.menu = pygame_menu.Menu(300, 400, 'Dino with RL', theme=pygame_menu.themes.THEME_DARK)
 
-        self.menu.add_button('Continue', self.continue_game)
-        self.menu.add_button('End Game', self.end_game)
-        self.menu.add_button('Exit', pygame_menu.events.EXIT)
-        self.menu.mainloop(self.screen)
+            self.menu.add_button('Continue', self.continue_game)
+            self.menu.add_button('End Game', self.end_game)
+            self.menu.add_button('Exit', pygame_menu.events.EXIT)
+            self.menu.mainloop(self.screen)

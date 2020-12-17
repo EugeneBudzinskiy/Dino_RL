@@ -49,29 +49,30 @@ class GameEngine:
         self.__clock = pg.time.Clock()
 
     def __key_checker(self, event):
-        if event.type == pg.KEYDOWN:
-            if event.key == pg.K_ESCAPE:
-                self.menu.pause_menu()
+        if not self.is_train:
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:
+                    self.menu.pause_menu()
 
-            elif event.key == pg.K_SPACE:
-                if not self.is_alive:
-                    self.menu.start_menu()
+                elif event.key == pg.K_SPACE:
+                    if not self.is_alive:
+                        self.menu.start_menu()
 
-                elif 'jump' not in self.__action_queue:
-                    self.__action_queue.append('jump')
+                    elif 'jump' not in self.__action_queue:
+                        self.__action_queue.append('jump')
 
-            elif event.key == pg.K_LCTRL:
-                if 'sit' not in self.__action_queue:
-                    self.__action_queue.append('sit')
+                elif event.key == pg.K_LCTRL:
+                    if 'sit' not in self.__action_queue:
+                        self.__action_queue.append('sit')
 
-        elif event.type == pg.KEYUP:
-            if event.key == pg.K_SPACE:
-                if 'jump' in self.__action_queue:
-                    self.__action_queue.remove('jump')
+            elif event.type == pg.KEYUP:
+                if event.key == pg.K_SPACE:
+                    if 'jump' in self.__action_queue:
+                        self.__action_queue.remove('jump')
 
-            elif event.key == pg.K_LCTRL:
-                if 'sit' in self.__action_queue:
-                    self.__action_queue.remove('sit')
+                elif event.key == pg.K_LCTRL:
+                    if 'sit' in self.__action_queue:
+                        self.__action_queue.remove('sit')
 
     def get_action_from_key_check(self):
         if len(self.__action_queue) == 0:
@@ -149,6 +150,6 @@ class GameEngine:
 
         self.__collision_check()
 
-        self.__hero.change_state(action)
+        self.__hero.change_state(action, self.is_train)
         self.__hero.update()
         self.__environment.update()

@@ -65,33 +65,33 @@ class Hero(PhysicalObject, ABC):
         for image in self.texture:
             image.change_location(self.coord)
 
-    def update_state(self):
-        if self._admire_state == 'nothing':
-            if self.coord[1] <= 0:
-                if self._state == 'sit':
-                    self._un_squish()
+    def update_state(self, train_flag=False):
+        if self.coord[1] <= 0:
+            if self._state == 'jump' or self._state == 'quick-fall':
                 self._state = 'nothing'
-                self._fall()
+
+        if self._admire_state == 'nothing':
+            if self._state == 'sit':
+                self._state = 'nothing'
+                self._un_squish()
 
         elif self._admire_state == 'jump':
-            if self._state == 'nothing' or self._state == 'sit' and self.coord[1] == 0:
-                self._un_squish()
+            if self._state == 'nothing':
+                self._state = 'jump'
                 self._jump()
                 self._fall()
-                self._state = 'jump'
-            elif self.coord[1] <= 0 and self._state == 'jump':
-                self._state = 'nothing'
 
         elif self._admire_state == 'sit':
-            if self._state == 'jump':
-                self._quick_fall()
-                self._state = 'quick-fall'
-            elif self._state == 'nothing' or self._state == 'quick-fall' and self.coord[1] >= 0:
-                self._squish()
+            if self._state == 'nothing':
                 self._state = 'sit'
+                self._squish()
+            elif self._state == 'jump':
+                self._state = 'quick-fall'
+                self._quick_fall()
 
-        self.change_textures()
+        if not train_flag:
+            self.change_textures()
 
-    def change_state(self, admire_state='nothing'):
+    def change_state(self, admire_state='nothing', train_flag=False):
         self._admire_state = admire_state
-        self.update_state()
+        self.update_state(train_flag)
