@@ -10,7 +10,7 @@ WIDTH = 1280
 HEIGHT = 720
 
 FPS = 60
-STANDARD_MODE = False
+STANDARD_MODE = True
 
 
 # >>> Object Part <<<
@@ -44,7 +44,7 @@ BIRD_SPAWN_HEIGHT = (20, 50, 80)
 
 GLOBAL_OFFSET = 30
 GROUND_LEVEL = 80
-NUMBER_OF_EXISTING_PROP = 7
+NUMBER_OF_EXISTING_PROP = 5
 
 BACKGROUND_IMAGE = []
 DINO_SIT_IMAGE = []
@@ -65,7 +65,7 @@ WASTED_IMAGE = pg.image.load(os.path.join("texture", "wasted-1.png"))
 
 # >>> Neural Network Part <<<
 
-EPISODE_COUNT = 1000
+EPISODE_COUNT = 10000
 MAX_STEPS_PER_EPISODE = 1000
 
 BUFFER_SIZE = int(1e6)

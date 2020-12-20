@@ -106,8 +106,9 @@ def process():
 
                 if running_reward > 500:
                     agent.brain.save_weights()
-                    print("FINISHING...")
+                    print("SAVING...")
                     break
+            print("FINISHING...")
 
 
 if __name__ == '__main__':
