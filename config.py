@@ -6,8 +6,8 @@ import pygame as pg
 
 # >>> Global Part <<<
 
-WIDTH = 800  # 1280
-HEIGHT = 600  # 720
+WIDTH = 1280
+HEIGHT = 720
 
 FPS = 60
 STANDARD_MODE = False
@@ -15,16 +15,16 @@ STANDARD_MODE = False
 
 # >>> Object Part <<<
 
-PROP_MOVE_VEL = 380
-HERO_JUMP_VEL = 740
+PROP_MOVE_VEL = 350
+HERO_JUMP_VEL = 1300
 
-GRAVITY_ACC = -40
-MAX_GRAVITY_ACC = 5 * GRAVITY_ACC
+GRAVITY_ACC = -70
+MAX_GRAVITY_ACC = 6 * GRAVITY_ACC
 
 MAX_VEL = 3000 / FPS
 MAX_ACC = 600 / FPS
 
-HERO_SIZE = tuple([48, 64])
+HERO_SIZE = tuple([64, 64])
 HERO_SIT_SIZE = tuple([88, 36])
 
 BIRD_SIZE = tuple([48, 48])

@@ -33,7 +33,7 @@ class GameEngine:
 
     @staticmethod
     def off_screen():
-        pg.display.iconify()
+        pg.display.quit()
 
     def setup(self):
         self.is_running = True
@@ -150,6 +150,6 @@ class GameEngine:
 
         self.__collision_check()
 
-        self.__hero.change_state(action)
+        self.__hero.change_state(action, self.is_train)
         self.__hero.update()
         self.__environment.update()

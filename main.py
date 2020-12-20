@@ -56,15 +56,13 @@ def process():
             running_reward = 0
             frame_count = 0
 
-            for i_episode in range(1, 2):
+            for i_episode in range(1, EPISODE_COUNT + 1):
                 engine.setup()
                 state = engine.get_state()
 
                 episode_reward = 0
 
                 for t in range(1, MAX_STEPS_PER_EPISODE + 1):
-                    # engine.render()
-
                     frame_count += 1
 
                     # Use epsilon-greedy for exploration
@@ -108,10 +106,8 @@ def process():
 
                 if running_reward > 500:
                     agent.brain.save_weights()
-                    print("SAVING ...")
+                    print("FINISHING...")
                     break
-
-            print("FINISHING...")
 
 
 if __name__ == '__main__':

@@ -65,7 +65,7 @@ class Hero(PhysicalObject, ABC):
         for image in self.texture:
             image.change_location(self.coord)
 
-    def update_state(self):
+    def update_state(self, train_flag=False):
         if self.coord[1] <= 0:
             if self._state == 'jump' or self._state == 'quick-fall':
                 self._state = 'nothing'
@@ -89,8 +89,9 @@ class Hero(PhysicalObject, ABC):
                 self._state = 'quick-fall'
                 self._quick_fall()
 
-        self.change_textures()
+        if not train_flag:
+            self.change_textures()
 
-    def change_state(self, admire_state='nothing'):
+    def change_state(self, admire_state='nothing', train_flag=False):
         self._admire_state = admire_state
-        self.update_state()
+        self.update_state(train_flag)
