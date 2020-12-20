@@ -46,13 +46,13 @@ class GameMenu:
 
         if self.engine.is_human:
             self.menu.add_button('Play', self.start_like_human)
-            self.menu.add_button('AI',   self.start_like_agent)
+            self.menu.add_button('AI', self.start_like_agent)
 
         else:
-            self.menu.add_button('Play',  self.start_like_agent)
+            self.menu.add_button('Play', self.start_like_agent)
             self.menu.add_button('HUMAN', self.start_like_human)
-            self.menu.add_button('Train',  self.train_it)
-            self.menu.add_button('Test',  self.test_it)
+            self.menu.add_button('Train', self.train_it)
+            self.menu.add_button('Test', self.test_it)
 
         self.menu.add_button('Exit', pygame_menu.events.EXIT)
         self.menu.mainloop(self.screen)

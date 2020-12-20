@@ -4,26 +4,47 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 import pygame as pg
 
+# >>> Global Part <<<
+
 WIDTH = 1280
 HEIGHT = 720
+
 FPS = 60
+STANDARD_MODE = True
 
-HUMAN = 0
-AGENT = 1
 
-BIRD_SIZE = tuple([48, 48])
-CACTUS_SIZE = [tuple([64, 64]), tuple([40, 64])]
+# >>> Object Part <<<
+
+PROP_MOVE_VEL = 350
+HERO_JUMP_VEL = 1300
+
+GRAVITY_ACC = -70
+MAX_GRAVITY_ACC = 6 * GRAVITY_ACC
+
+MAX_VEL = 3000 / FPS
+MAX_ACC = 600 / FPS
+
 HERO_SIZE = tuple([64, 64])
 HERO_SIT_SIZE = tuple([88, 36])
 
-GLOBAL_OFFSET = 30
-GROUND_LEVEL = 85
-FIRST_SPAWN_DISTANCE = HERO_SIZE[0] * 10
-NUMBER_OF_EXISTING_PROP = 20
+BIRD_SIZE = tuple([48, 48])
+CACTUS_SIZE = tuple([
+    tuple([40, 64]),
+    tuple([64, 64])
+])
 
 SPAWN_DISTANCE = [HERO_SIZE[0] * 8, HERO_SIZE[0] * 9, HERO_SIZE[0] * 10]
+FIRST_SPAWN_DISTANCE = HERO_SIZE[0] * 10
+
 BIRD_SPAWN_CHANCE = 10  # 1/10
-BIRD_SPAWN_HEIGHT = (-16, -38, -80)
+BIRD_SPAWN_HEIGHT = (20, 50, 80)
+
+
+# >>> Game Part <<<
+
+GLOBAL_OFFSET = 30
+GROUND_LEVEL = 80
+NUMBER_OF_EXISTING_PROP = 5
 
 BACKGROUND_IMAGE = []
 DINO_SIT_IMAGE = []
@@ -42,15 +63,15 @@ BIRD_IMAGE = [pg.image.load(os.path.join("texture", 'Bird-1.png')),
 WASTED_IMAGE = pg.image.load(os.path.join("texture", "wasted-1.png"))
 
 
-# Neural Network Part
+# >>> Neural Network Part <<<
 
-EPISODE_COUNT = 5000
+EPISODE_COUNT = 10000
 MAX_STEPS_PER_EPISODE = 1000
 
 BUFFER_SIZE = int(1e6)
 BATCH_SIZE = 32
 
-UPDATE_AFTER_FRAME = 2
+UPDATE_AFTER_FRAME = 4
 SYNC_AFTER_FRAME = 10000
 
 LEARNING_RATE = 1e-4

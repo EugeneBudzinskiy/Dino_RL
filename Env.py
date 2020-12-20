@@ -43,4 +43,5 @@ class Environment:
     def update(self):
         for prop in self.__prop_list:
             prop.update()
-            self.__remove_prop(prop)
+
+        self.__remove_prop(self.__prop_list[0])

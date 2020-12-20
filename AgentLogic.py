@@ -8,7 +8,7 @@ from config import EPSILON, EPSILON_MIN, EPSILON_INTERVAL
 from config import EPSILON_GREEDY_FRAMES, EPSILON_RANDOM_FRAMES
 
 
-class Interpreter:
+class AgentLogic:
     def __init__(self, state_size, action_size):
         self.state_size = state_size
         self.action_size = action_size

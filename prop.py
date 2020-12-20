@@ -3,14 +3,16 @@ from random import randint
 
 from Interfaces import IProp
 from PhysxObj import PhysicalObject
-from config import BIRD_SPAWN_HEIGHT, BIRD_IMAGE, CACTUS_IMAGE, CACTUS_SIZE
 from image import Image
+from config import BIRD_SPAWN_HEIGHT, BIRD_IMAGE
+from config import CACTUS_SIZE, CACTUS_IMAGE
+from config import PROP_MOVE_VEL
 
 
 class Prop(PhysicalObject, IProp, ABC):
     def __init__(self, height: int, width: int):
         super().__init__()
-        self._prop_vel = 5
+        self._prop_vel = PROP_MOVE_VEL
         self._spawn_height = 0
 
         self.is_visible = False
@@ -18,7 +20,6 @@ class Prop(PhysicalObject, IProp, ABC):
         self.texture = None
 
         self.set_size(width, height)
-        self.set_col_size(int(width * .75), int(height * .75))
         self.set_vel(self._prop_vel, 0)
 
     @property
@@ -35,7 +36,7 @@ class Prop(PhysicalObject, IProp, ABC):
 
     @spawn_height.setter
     def spawn_height(self, height):
-        if height >= 0:
+        if height <= 0:
             self._spawn_height = 0
         else:
             self._spawn_height = height

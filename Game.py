@@ -2,16 +2,16 @@ from CollisionLogic import CollisionLogic
 from Env import Environment
 from Graphics import Graphics
 from Hero import Hero
-from config import *
 from menu import GameMenu
+from config import *
 
 
 class GameEngine:
     def __init__(self):
         self.is_running = False
-        self.is_human = True
         self.is_alive = False
         self.is_train = False
+        self.is_human = True
 
         self.__hero = Hero()
 
@@ -33,11 +33,7 @@ class GameEngine:
 
     @staticmethod
     def off_screen():
-        pg.display.quit()
-
-    def save_the_progress(self):
-        if not self.is_human:
-            pass
+        pg.display.iconify()
 
     def setup(self):
         self.is_running = True
@@ -53,29 +49,30 @@ class GameEngine:
         self.__clock = pg.time.Clock()
 
     def __key_checker(self, event):
-        if event.type == pg.KEYDOWN:
-            if event.key == pg.K_ESCAPE:
-                self.menu.pause_menu()
+        if not self.is_train:
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:
+                    self.menu.pause_menu()
 
-            elif event.key == pg.K_SPACE:
-                if not self.is_alive:
-                    self.menu.start_menu()
+                elif event.key == pg.K_SPACE:
+                    if not self.is_alive:
+                        self.menu.start_menu()
 
-                elif 'jump' not in self.__action_queue:
-                    self.__action_queue.append('jump')
+                    elif 'jump' not in self.__action_queue:
+                        self.__action_queue.append('jump')
 
-            elif event.key == pg.K_LCTRL:
-                if 'sit' not in self.__action_queue:
-                    self.__action_queue.append('sit')
+                elif event.key == pg.K_LCTRL:
+                    if 'sit' not in self.__action_queue:
+                        self.__action_queue.append('sit')
 
-        elif event.type == pg.KEYUP:
-            if event.key == pg.K_SPACE:
-                if 'jump' in self.__action_queue:
-                    self.__action_queue.remove('jump')
+            elif event.type == pg.KEYUP:
+                if event.key == pg.K_SPACE:
+                    if 'jump' in self.__action_queue:
+                        self.__action_queue.remove('jump')
 
-            elif event.key == pg.K_LCTRL:
-                if 'sit' in self.__action_queue:
-                    self.__action_queue.remove('sit')
+                elif event.key == pg.K_LCTRL:
+                    if 'sit' in self.__action_queue:
+                        self.__action_queue.remove('sit')
 
     def get_action_from_key_check(self):
         if len(self.__action_queue) == 0:
@@ -90,6 +87,45 @@ class GameEngine:
         if collision_logic.check_collision(self.__hero, current_prop):
             self.is_alive = False
 
+    def get_state(self):
+        cur_prop = self.__environment.prop_list[0]
+
+        hero_y = self.__hero.coord[1]
+        hero_x_size, hero_y_size = self.__hero.size
+        hero_r_u_x = hero_x_size
+        hero_r_u_y = hero_y + hero_y_size
+        hero_vel_y = self.__hero.vel[1]
+        hero_acc_y = self.__hero.acc[1]
+
+        prop_x, prop_y = cur_prop.coord
+        prop_x_size, prop_y_size = cur_prop.size
+        prop_r_u_x = prop_x + prop_x_size
+        prop_r_u_y = prop_y + prop_y_size
+        prop_vel_x = cur_prop.vel[0]
+
+        hero_y /= self.__height
+        hero_r_u_x /= self.__width
+        hero_r_u_y /= self.__height
+        hero_vel_y /= MAX_VEL
+        hero_acc_y /= MAX_ACC
+
+        prop_x /= self.__width
+        prop_y /= self.__height
+        prop_r_u_x /= self.__width
+        prop_r_u_y /= self.__height
+        prop_vel_x /= MAX_VEL
+
+        result = [hero_y, hero_r_u_x, hero_r_u_y, hero_vel_y, hero_acc_y,
+                  prop_x, prop_y, prop_r_u_x, prop_r_u_y, prop_vel_x]
+        return result
+
+    def get_all_info(self):
+        next_state = self.get_state()
+        reward = 1
+        done = not self.is_alive
+
+        return next_state, reward, done
+
     def render(self):
         self.__clock.tick(FPS)
 
@@ -100,53 +136,20 @@ class GameEngine:
                 self.__key_checker(event)
 
         if not self.is_alive:
-            finishing = self.__graphics.draw_wasted_screen()
-            if finishing:
+            finished = self.__graphics.draw_wasted_screen()
+            if finished:
                 self.menu.start_menu()
         else:
             visible_obj = self.__environment.prop_list
-            self.__graphics.draw(self.__hero, visible_obj, self.__score)
+            self.__graphics.draw(self.__hero, visible_obj, self.__score, STANDARD_MODE)
 
         pg.display.update()
 
     def step(self, action):
         self.__score += 1
+
+        self.__collision_check()
+
         self.__hero.change_state(action)
         self.__hero.update()
-        self.__collision_check()
         self.__environment.update()
-
-    def get_state(self):
-        cur_prop = self.__environment.prop_list[0]
-
-        hero_y = self.__hero.coord[1]
-        hero_x_size, hero_y_size = self.__hero.size
-        hero_vel_y = self.__hero.vel[1]
-        hero_acc_y = self.__hero.acc[1]
-
-        prop_x, prop_y = cur_prop.coord
-        prop_x_size, prop_y_size = cur_prop.size
-        prop_vel_x = cur_prop.vel[0]
-
-        hero_y /= self.__height
-        hero_x_size /= 100
-        hero_y_size /= 100
-        hero_vel_y /= 100
-        hero_acc_y /= self.__hero.get_max_acc()
-
-        prop_x /= self.__width
-        prop_y /= self.__height
-        prop_x_size /= 100
-        prop_y_size /= 100
-        prop_vel_x /= 100
-
-        result = [hero_y, hero_x_size, hero_y_size, hero_vel_y, hero_acc_y,
-                  prop_x, prop_x, prop_x_size, prop_y_size, prop_vel_x]
-        return result
-
-    def get_all_info(self):
-        next_state = self.get_state()
-        reward = 1
-        done = not self.is_alive
-
-        return next_state, reward, done
