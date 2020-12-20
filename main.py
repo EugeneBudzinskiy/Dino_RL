@@ -56,7 +56,7 @@ def process():
             running_reward = 0
             frame_count = 0
 
-            for i_episode in range(1, EPISODE_COUNT + 1):
+            for i_episode in range(1, 2):
                 engine.setup()
                 state = engine.get_state()
 

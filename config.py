@@ -6,8 +6,8 @@ import pygame as pg
 
 # >>> Global Part <<<
 
-WIDTH = 1280
-HEIGHT = 720
+WIDTH = 800  # 1280
+HEIGHT = 600  # 720
 
 FPS = 60
 STANDARD_MODE = False
