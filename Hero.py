@@ -1,5 +1,3 @@
-from abc import ABC
-
 from PhysxObj import PhysicalObject
 from image import Image
 from config import DINO_SIT_IMAGE, DINO_IMAGE
@@ -8,7 +6,7 @@ from config import HERO_JUMP_VEL
 from config import GRAVITY_ACC, MAX_GRAVITY_ACC
 
 
-class Hero(PhysicalObject, ABC):
+class Hero(PhysicalObject):
     texture_pack = []
     t = []
     for image in DINO_SIT_IMAGE:
